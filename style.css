@@ -8,6 +8,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 html {
   scroll-behavior: smooth;
@@ -192,16 +193,17 @@ a {
   margin: 1rem 0 2rem;
 }
 
-#home .header-content .social a i {
+#home .header-content .social a  {
   font-size: 18px;
   padding: 10px;
   background-color: var(--gray);
+  display: inline-flex;
   color: #fff;
   border-radius: 50%;
   transition: all 0.3s ease;
 }
 
-#home .header-content .social a i:hover {
+#home .header-content .social a:hover {
   transform: scale(0.85);
 }
 
