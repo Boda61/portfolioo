@@ -29,7 +29,15 @@
       <div class="navbar">
         <nav>
           <a href="#home" id="logo">ABDULLAH MOHAMED</a>
-          <ul>
+
+          <!-- زرار المينيو -->
+          <div class="menu-toggle" id="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <ul id="menu">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
@@ -51,7 +59,10 @@
             >
               <i class="fa-brands fa-facebook"></i>
             </a>
-            <a href="https://www.linkedin.com/in/apdallah-mohamed-785a92384/" target="_blank">
+            <a
+              href="https://www.linkedin.com/in/apdallah-mohamed-785a92384/"
+              target="_blank"
+            >
               <i class="fa-brands fa-linkedin"></i>
             </a>
             <a href="https://www.instagram.com/x_boda_xx30/" target="_blank">
@@ -241,7 +252,9 @@
             <img src="Portfolio 4.png" alt="Portfolio 4" />
             <div class="item-content">
               <h3>Jewels Store</h3>
-              <a href="https://boda61.github.io/jewels-jewellery/" target="_blank"
+              <a
+                href="https://boda61.github.io/jewels-jewellery/"
+                target="_blank"
                 >visit website</a
               >
             </div>
@@ -348,98 +361,6 @@
       <i class="fa-solid fa-arrow-up"></i>
     </button>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <!-- اسكريبت الصوره وال text -->
-    <script>
-      AOS.init();
-      const text = "ABDULLAH MOHAMED";
-      let index = 0;
-
-      function typeName() {
-        if (index < text.length) {
-          document.getElementById("typing-name").innerHTML +=
-            text.charAt(index);
-          index++;
-          setTimeout(typeName, 100);
-        }
-      }
-
-      typeName();
-
-      const jobs = [
-        "Frontend Developer",
-        "UI Designer",
-        "Web Developer",
-        "Freelancer",
-      ];
-
-      let jobIndex = 0;
-      let charIndex = 0;
-      let currentJob = "";
-      let isDeleting = false;
-
-      function typeEffect() {
-        currentJob = jobs[jobIndex];
-
-        if (isDeleting) {
-          charIndex--;
-        } else {
-          charIndex++;
-        }
-
-        document.getElementById("typing-job").textContent =
-          currentJob.substring(0, charIndex);
-
-        let speed = 100;
-
-        if (isDeleting) {
-          speed = 50;
-        }
-
-        if (!isDeleting && charIndex === currentJob.length) {
-          speed = 1500;
-          isDeleting = true;
-        } else if (isDeleting && charIndex === 0) {
-          isDeleting = false;
-          jobIndex++;
-          if (jobIndex === jobs.length) {
-            jobIndex = 0;
-          }
-        }
-
-        setTimeout(typeEffect, speed);
-      }
-
-      typeEffect();
-    </script>
-    <!-- اسكريبت scrollTop -->
-    <script>
-      const scrollBtn = document.getElementById("scrollTop");
-
-      window.addEventListener("scroll", function () {
-        if (window.scrollY > 300) {
-          scrollBtn.style.display = "block";
-        } else {
-          scrollBtn.style.display = "none";
-        }
-      });
-
-      scrollBtn.onclick = function () {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      };
-    </script>
-    <!-- اسكريبت اللودينج -->
-    <script>
-      window.addEventListener("load", function () {
-        const loader = document.getElementById("loader");
-        loader.style.transition = "opacity 0.5s ease";
-        loader.style.opacity = 0;
-        setTimeout(function () {
-          loader.style.display = "none";
-        }, 500);
-      });
-    </script>
+    <script src="main.js"></script>
   </body>
 </html>

@@ -640,3 +640,44 @@ font-size:28px;
 }
 
 }
+/* menu toggle */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  height: 3px;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+  
+  #home .navbar nav ul {
+    display: none;
+    flex-direction: column;
+    margin-top: 15px;
+    background-color: #fff;
+    padding: 10px 0;
+    border-radius: 5px;
+  }
+
+  #home .navbar nav ul.active {
+    display: flex;
+  }
+
+  #home .navbar nav ul li {
+    margin: 10px 0;
+  }
+}
