@@ -98,10 +98,18 @@ window.addEventListener("load", function () {
 // ======================
 // زرار المينيو للموبايل
 // ======================
-const menuToggle = document.getElementById('menu-toggle');
-const menu = document.getElementById('menu');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navUl = document.querySelector('#home .navbar nav ul');
+  const navLinks = document.querySelectorAll('#home .navbar nav ul li a');
 
-menuToggle.addEventListener('click', () => {
-  menu.classList.toggle('active'); // فتح/غلق القائمة
-  menuToggle.classList.toggle('open'); // لتحويل الهامبرغر لعلامة X
-});
+  // toggle menu on click
+  menuToggle.addEventListener('click', () => {
+    navUl.classList.toggle('active');
+  });
+
+  // hide menu when clicking a link
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navUl.classList.remove('active');
+    });
+  });
