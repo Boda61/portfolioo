@@ -681,3 +681,73 @@ font-size:28px;
     margin: 10px 0;
   }
 }
+
+/* Mobile Ultra Small - أقل من 440px */
+@media (max-width: 440px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  #home .header-content {
+    grid-template-columns: 1fr;
+    padding: 5rem 0.5rem 0;
+    max-width: 100%;
+    margin: auto;
+  }
+
+  #home .header-content img {
+    max-width: 250px;
+    height:250px;
+    margin: 1rem auto;
+  }
+
+  #home .header-content h1 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  #home .header-content p span,
+  #home .header-content .title {
+    font-size: 14px;
+  }
+
+  #about .about-content,
+  #skills .skills-content .row,
+  #Services .row,
+  #portfolio .row,
+  #contact .row {
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+    max-width: 100%;
+  }
+
+  #about h2,
+  #skills h2,
+  #Services h2,
+  #portfolio h2,
+  #contact h2 {
+    font-size: 26px;
+  }
+
+  .btn-primary {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+
+  #home .header-content .social a {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    padding: 30px 10px;
+    text-align: center;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+}
