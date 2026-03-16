@@ -87,6 +87,26 @@ a {
 .btn-primary:hover {
   background-color: #15a076;
 }
+
+/* menu toggle */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  height: 3px;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+
 /* hedar start */
 #home {
   background-color: var(--bg-primary);
@@ -218,6 +238,21 @@ a {
   box-shadow: 0 10px 40px var(--secondary-color);
   animation: float 2s ease-in-out infinite;
 }
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 /* hedar end */
 
 /* about start */
@@ -368,6 +403,8 @@ a {
   font-size: 14px;
 }
 /* Services end */
+
+
 /* portfolio start */
 #portfolio {
   background-color: var(--primary-color);
@@ -416,6 +453,7 @@ a {
 }
 /* portfolio end */
 
+
 /* contact start */
 #contact {
   padding: 4rem 0;
@@ -443,6 +481,8 @@ a {
   background-color: #00f4ab0c;
 }
 /* contact end */
+
+
 /* footer start */
 #footer {
   background: #0f272d;
@@ -614,19 +654,7 @@ a {
     padding: 2rem 1rem;
   }
 }
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
 
-  50% {
-    transform: translateY(-15px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
 @media (max-width:480px){
 
 #skills .skills-content .row,
@@ -639,23 +667,6 @@ grid-template-columns:1fr;
 font-size:28px;
 }
 
-}
-/* menu toggle */
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 22px;
-  cursor: pointer;
-}
-
-.menu-toggle span {
-  height: 3px;
-  width: 100%;
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  transition: all 0.3s ease;
 }
 
 /* responsive */
