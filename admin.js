@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    var supabaseClient = window.supabaseClient || (typeof initSupabase === "function" ? initSupabase() : null);
     // ========================================
     // DOM ELEMENTS
     // ========================================
@@ -138,6 +139,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // AUTH: CHECK SESSION
     // ========================================
     async function checkSession() {
+        if (!supabaseClient) {
+            supabaseClient = window.supabaseClient || (typeof initSupabase === "function" ? initSupabase() : null);
+        }
         if (!supabaseClient) {
             showToast("Supabase client is not loaded.", "error");
             return;
