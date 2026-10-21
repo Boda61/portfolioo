@@ -1,0 +1,15 @@
+# Dependencies & Environment
+.env
+.env.local
+.env.*.local
+
+# Supabase Credentials (keep private when uploading to GitHub)
+supabase-config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/

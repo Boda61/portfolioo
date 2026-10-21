@@ -300,4 +300,92 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         });
     }
+
+    // ========================================
+    // DYNAMIC PROJECTS FROM SUPABASE
+    // ========================================
+    function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    async function loadDynamicProjects() {
+        const client = window.supabaseClient || (typeof supabaseClient !== "undefined" ? supabaseClient : null);
+        if (!client) {
+            return;
+        }
+
+        try {
+            const { data: projects, error } = await client
+                .from("portfolio_projects")
+                .select("*")
+                .order("order_index", { ascending: true })
+                .order("created_at", { ascending: true });
+
+            if (error) {
+                console.info("Using static portfolio projects fallback (Supabase info: " + error.message + ")");
+                return;
+            }
+
+            if (!projects) {
+                return;
+            }
+
+            const projectsGrid = document.querySelector(".projects-grid");
+            if (!projectsGrid) return;
+
+            // Render dynamic projects
+            projectsGrid.innerHTML = "";
+
+            projects.forEach((project, index) => {
+                const card = document.createElement("div");
+                card.className = "project-card glass-card fade-up";
+                const delay = (index % 3) * 0.1;
+                if (delay > 0) {
+                    card.style.transitionDelay = `${delay}s`;
+                }
+
+                const techList = Array.isArray(project.tech_stack)
+                    ? project.tech_stack
+                    : (typeof project.tech_stack === "string" ? project.tech_stack.split(",") : []);
+
+                const techSpans = techList
+                    .map(t => `<span>${escapeHtml(t.trim())}</span>`)
+                    .join("");
+
+                const linkMarkup = project.live_url
+                    ? `<div class="project-links"><a href="${escapeHtml(project.live_url)}" target="_blank" rel="noopener noreferrer" class="project-link">Live Demo ↗</a></div>`
+                    : "";
+
+                card.innerHTML = `
+                    <div class="project-img-wrapper">
+                        <img src="${escapeHtml(project.image_url)}" alt="${escapeHtml(project.title)}" class="project-image" loading="lazy">
+                        ${linkMarkup}
+                    </div>
+                    <div class="project-info">
+                        <span class="project-category">${escapeHtml(project.category || "Project")}</span>
+                        <h3 class="project-title">${escapeHtml(project.title)}</h3>
+                        <p class="project-desc">${escapeHtml(project.description || "")}</p>
+                        <div class="tech-stack">
+                            ${techSpans}
+                        </div>
+                    </div>
+                `;
+
+                projectsGrid.appendChild(card);
+                if (typeof observer !== "undefined" && observer.observe) {
+                    observer.observe(card);
+                }
+            });
+        } catch (err) {
+            console.error("Dynamic projects error:", err);
+        }
+    }
+
+    loadDynamicProjects();
 });
