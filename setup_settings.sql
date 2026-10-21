@@ -27,3 +27,32 @@ CREATE POLICY "Admins can manage portfolio settings"
     TO authenticated
     USING (true)
     WITH CHECK (true);
+
+-- ==========================================================
+-- STORAGE BUCKET: portfolio-images
+-- Run this if you want to store uploaded images in Supabase Storage
+-- ==========================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('portfolio-images', 'portfolio-images', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Public can view uploaded images
+DROP POLICY IF EXISTS "Public can view portfolio images" ON storage.objects;
+CREATE POLICY "Public can view portfolio images"
+    ON storage.objects FOR SELECT
+    USING (bucket_id = 'portfolio-images');
+
+-- Authenticated admins can upload images
+DROP POLICY IF EXISTS "Authenticated users can upload portfolio images" ON storage.objects;
+CREATE POLICY "Authenticated users can upload portfolio images"
+    ON storage.objects FOR INSERT
+    TO authenticated
+    WITH CHECK (bucket_id = 'portfolio-images');
+
+-- Authenticated admins can update/delete images
+DROP POLICY IF EXISTS "Authenticated users can update portfolio images" ON storage.objects;
+CREATE POLICY "Authenticated users can update portfolio images"
+    ON storage.objects FOR UPDATE
+    TO authenticated
+    USING (bucket_id = 'portfolio-images');
+

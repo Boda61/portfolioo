@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroForm = document.getElementById("hero-settings-form");
     const heroImageFileInput = document.getElementById("hero-image-file");
     const heroProfileImageInput = document.getElementById("hero-profile-image");
+    const heroAvatarPreview = document.getElementById("hero-avatar-preview");
     const aboutForm = document.getElementById("about-settings-form");
     const skillsForm = document.getElementById("skills-settings-form");
     const contactForm = document.getElementById("contact-settings-form");
@@ -708,6 +709,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("hero-cta-primary").value = h.ctaPrimary || "";
         document.getElementById("hero-cta-secondary").value = h.ctaSecondary || "";
 
+        if (heroAvatarPreview && h.profileImage) {
+            heroAvatarPreview.src = h.profileImage;
+        }
+
         // About
         const a = settings.about || defaultSettings.about;
         document.getElementById("about-paragraph-1").value = a.paragraph1 || "";
@@ -731,6 +736,16 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("social-linkedin").value = c.linkedin || "";
         document.getElementById("social-facebook").value = c.facebook || "";
         document.getElementById("social-instagram").value = c.instagram || "";
+    }
+
+    // Sync manual typing in Profile Image URL with preview
+    if (heroProfileImageInput) {
+        heroProfileImageInput.addEventListener("input", () => {
+            const val = heroProfileImageInput.value.trim();
+            if (heroAvatarPreview && val) {
+                heroAvatarPreview.src = val;
+            }
+        });
     }
 
     async function saveSectionSettings(key, valueObj, btn) {
@@ -768,31 +783,93 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Helper to compress hero avatar to high-quality data URL
+    function compressImageToDataUrl(fileObj, maxDimension = 900, quality = 0.88) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            const objectUrl = URL.createObjectURL(fileObj);
+            img.onload = () => {
+                URL.revokeObjectURL(objectUrl);
+                let { width, height } = img;
+                if (width > maxDimension || height > maxDimension) {
+                    if (width > height) {
+                        height = Math.round((height * maxDimension) / width);
+                        width = maxDimension;
+                    } else {
+                        width = Math.round((width * maxDimension) / height);
+                        height = maxDimension;
+                    }
+                }
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                try {
+                    resolve(canvas.toDataURL("image/webp", quality));
+                } catch (e) {
+                    resolve(canvas.toDataURL("image/jpeg", quality));
+                }
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(objectUrl);
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.target.result);
+                reader.readAsDataURL(fileObj);
+            };
+            img.src = objectUrl;
+        });
+    }
+
     // Hero Avatar Upload
     if (heroImageFileInput) {
         heroImageFileInput.addEventListener("change", async () => {
             const file = heroImageFileInput.files[0];
             if (!file) return;
 
-            showToast("Uploading profile image...", "info");
-            const fileExt = file.name.split(".").pop();
-            const fileName = `profile-${Date.now()}.${fileExt}`;
-
-            const { data, error } = await supabaseClient.storage
-                .from("portfolio-images")
-                .upload(fileName, file, { cacheControl: "3600", upsert: true });
-
-            if (error) {
-                showToast("Upload failed: " + error.message, "error");
-                return;
+            // 1. Instant local preview
+            const localPreviewUrl = URL.createObjectURL(file);
+            if (heroAvatarPreview) {
+                heroAvatarPreview.src = localPreviewUrl;
             }
 
-            const { data: urlData } = supabaseClient.storage
-                .from("portfolio-images")
-                .getPublicUrl(data.path);
+            showToast("Processing image...", "info");
 
-            heroProfileImageInput.value = urlData.publicUrl;
-            showToast("Profile image uploaded.", "success");
+            let finalImageUrl = null;
+
+            // 2. Try Supabase Storage upload
+            try {
+                const fileExt = file.name.split(".").pop();
+                const fileName = `profile-${Date.now()}.${fileExt}`;
+
+                const { data, error } = await supabaseClient.storage
+                    .from("portfolio-images")
+                    .upload(fileName, file, { cacheControl: "3600", upsert: true });
+
+                if (!error && data?.path) {
+                    const { data: urlData } = supabaseClient.storage
+                        .from("portfolio-images")
+                        .getPublicUrl(data.path);
+                    if (urlData?.publicUrl) {
+                        finalImageUrl = urlData.publicUrl;
+                    }
+                }
+            } catch (storageErr) {
+                console.warn("Supabase storage upload error:", storageErr);
+            }
+
+            // 3. Fallback to optimized compressed data URL if storage bucket doesn't exist
+            if (!finalImageUrl) {
+                finalImageUrl = await compressImageToDataUrl(file);
+                showToast("Image ready! Click 'Save Hero Changes' below to apply.", "success");
+            } else {
+                showToast("Image uploaded! Click 'Save Hero Changes' below to apply.", "success");
+            }
+
+            heroProfileImageInput.value = finalImageUrl;
+            if (heroAvatarPreview) {
+                heroAvatarPreview.src = finalImageUrl;
+            }
         });
     }
 

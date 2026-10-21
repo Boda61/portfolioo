@@ -221,15 +221,23 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="hero-profile-image">Profile Image URL</label>
-                                <div class="input-with-button">
-                                    <input type="text" id="hero-profile-image" placeholder="generation-f0f658ee-6474-489f-b072-ed21158cec54.png">
-                                    <label class="btn btn-secondary file-upload-label">
-                                        Upload Image
-                                        <input type="file" id="hero-image-file" accept="image/*" style="display: none;">
-                                    </label>
+                                <label for="hero-profile-image">Profile Image / Avatar</label>
+                                <div class="hero-avatar-uploader">
+                                    <div class="hero-avatar-preview-wrap">
+                                        <img id="hero-avatar-preview" src="generation-f0f658ee-6474-489f-b072-ed21158cec54.png" alt="Profile Preview" class="hero-avatar-preview-img">
+                                        <div class="hero-avatar-badge">Preview</div>
+                                    </div>
+                                    <div class="hero-avatar-controls">
+                                        <div class="input-with-button">
+                                            <input type="text" id="hero-profile-image" placeholder="Image URL or upload file">
+                                            <label class="btn btn-secondary file-upload-label">
+                                                Upload Image
+                                                <input type="file" id="hero-image-file" accept="image/*" style="display: none;">
+                                            </label>
+                                        </div>
+                                        <span class="input-hint">Choose an image from your computer or paste an image URL.</span>
+                                    </div>
                                 </div>
-                                <span class="input-hint">URL to your personal headshot/avatar or upload a local file.</span>
                             </div>
 
                             <div class="form-row">
