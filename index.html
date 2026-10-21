@@ -1,393 +1,609 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apdallah Mohamed | Portfolio</title>
-    <meta name="description" content="Portfolio of Apdallah Mohamed, a futuristic creative developer and UI designer.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta
+      name="description"
+      content="Portfolio of Apdallah Mohamed, a futuristic creative developer and UI designer."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <!-- Loading Screen -->
     <div id="loader" class="loader-wrapper">
-        <div class="loader-content">
-            <div class="glow-orb"></div>
-            <span class="loader-text">INITIALIZING</span>
-        </div>
+      <div class="loader-content">
+        <div class="glow-orb"></div>
+        <span class="loader-text">INITIALIZING</span>
+      </div>
     </div>
 
     <!-- Background Canvas -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">Apdallah<span>.</span></div>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li> 
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Work</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#contact" class="btn-outline">Contact</a></li>
-        </ul>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+    <!-- Site Header (Announcement + Stepper Navigation) -->
+    <header class="site-header">
+      <!-- Top Announcement Bar -->
+      <div class="top-announcement" id="top-announcement">
+        <div class="announcement-content">
+          <span class="announcement-badge">AVAILABLE</span>
+          <span class="announcement-text">Open for freelance projects & full-time senior engineering roles</span>
+          <a href="#contact" class="announcement-link">Get in touch &rarr;</a>
         </div>
-    </nav>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="nav-container">
+          <!-- Brand / Logo -->
+          <a href="#hero" class="brand-logo">
+            <div class="brand-mark">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-title">APDALLAH.</span>
+              <span class="brand-subtitle">PORTFOLIO</span>
+            </div>
+          </a>
+
+          <!-- Timeline Stepper Navigation Track -->
+          <div class="nav-stepper-wrap">
+            <div class="stepper-rail-line"></div>
+            <div class="stepper-rail-progress"></div>
+            <div class="stepper-indicator">
+              <span class="indicator-glow"></span>
+              <span class="indicator-tick"></span>
+            </div>
+            <ul class="nav-steps">
+              <li class="nav-step active" data-section="hero">
+                <a href="#hero">
+                  <span class="step-num">01</span>
+                  <span class="step-label">Home</span>
+                </a>
+                <span class="step-tick"></span>
+              </li>
+              <li class="nav-step" data-section="about">
+                <a href="#about">
+                  <span class="step-num">02</span>
+                  <span class="step-label">About</span>
+                </a>
+                <span class="step-tick"></span>
+              </li>
+              <li class="nav-step" data-section="projects">
+                <a href="#projects">
+                  <span class="step-num">03</span>
+                  <span class="step-label">Work</span>
+                </a>
+                <span class="step-tick"></span>
+              </li>
+              <li class="nav-step" data-section="skills">
+                <a href="#skills">
+                  <span class="step-num">04</span>
+                  <span class="step-label">Skills</span>
+                </a>
+                <span class="step-tick"></span>
+              </li>
+              <li class="nav-step" data-section="contact">
+                <a href="#contact">
+                  <span class="step-num">05</span>
+                  <span class="step-label">Contact</span>
+                </a>
+                <span class="step-tick"></span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Action CTA Pill Button -->
+          <div class="nav-actions">
+            <a href="#contact" class="nav-pill-btn">
+              <span class="pill-dot"></span>
+              <span class="pill-text">Let's Talk</span>
+            </a>
+            <div class="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
 
     <!-- Hero Section -->
     <section id="hero" class="hero">
-        <div class="hero-content fade-in-up">
-            <div class="badge">Available for new opportunities</div>
-            <h1 class="hero-title">Hi, I'm <span class="text-gradient">Apdallah</span><br>Mohamed.</h1>
-            <h2 class="hero-job">I am a <span id="typing-job" class="text-gradient"></span><span
-                    class="typing-cursor">|</span></h2>
-            <div class="social-links hero-socials">
-                <a href="https://github.com/" target="_blank" class="social-link" title="GitHub">GH</a>
-                <a href="https://www.linkedin.com/in/apdallah-mohamed-785a92384/" target="_blank" class="social-link"
-                    title="LinkedIn">IN</a>
-                <a href="https://www.facebook.com/abdullah.mohamed.506669?locale=ar_AR" target="_blank"
-                    class="social-link" title="Facebook">FB</a>
-                <a href="https://www.instagram.com/x_boda_xx30/" target="_blank" class="social-link"
-                    title="Instagram">IS</a>
-            </div>
-            <div class="hero-cta">
-                <a href="#projects" class="btn-primary">View Projects</a>
-                <a href="#contact" class="btn-secondary">Let's Talk</a>
-            </div>
+      <div class="hero-content fade-in-up">
+        <div class="badge">Available for new opportunities</div>
+        <h1 class="hero-title">
+          Hi, I'm <span class="text-gradient">Apdallah</span><br />Mohamed.
+        </h1>
+        <h2 class="hero-job">
+          I am a <span id="typing-job" class="text-gradient"></span
+          ><span class="typing-cursor">|</span>
+        </h2>
+        <div class="social-links hero-socials">
+          <a
+            href="https://github.com/"
+            target="_blank"
+            class="social-link"
+            title="GitHub"
+            >GH</a
+          >
+          <a
+            href="https://www.linkedin.com/in/apdallah-mohamed-785a92384/"
+            target="_blank"
+            class="social-link"
+            title="LinkedIn"
+            >IN</a
+          >
+          <a
+            href="https://www.facebook.com/abdullah.mohamed.506669?locale=ar_AR"
+            target="_blank"
+            class="social-link"
+            title="Facebook"
+            >FB</a
+          >
+          <a
+            href="https://www.instagram.com/x_boda_xx30/"
+            target="_blank"
+            class="social-link"
+            title="Instagram"
+            >IS</a
+          >
         </div>
-        <div class="hero-visual fade-in">
-            <!-- 3D Profile Image Container -->
-            <div class="profile-3d-wrapper">
-                <div class="profile-image-container">
-                    <!-- You can replace the src below with your actual image path -->
-                    <img src="generation-f0f658ee-6474-489f-b072-ed21158cec54.png" alt="Apdallah Mohamed"
-                        class="profile-img" id="profile3d">
-                    <div class="profile-glow"></div>
-                </div>
-            </div>
+        <div class="hero-cta">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="#contact" class="btn-secondary">Let's Talk</a>
         </div>
+      </div>
+      <div class="hero-visual fade-in">
+        <!-- 3D Profile Image Container -->
+        <div class="profile-3d-wrapper">
+          <div class="profile-image-container">
+            <!-- You can replace the src below with your actual image path -->
+            <img
+              src="generation-f0f658ee-6474-489f-b072-ed21158cec54.png"
+              alt="Apdallah Mohamed"
+              class="profile-img"
+              id="profile3d"
+            />
+            <div class="profile-glow"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about section-padding">
-        <div class="container">
-            <h2 class="section-title reveal-text">01. About Me</h2>
-            <div class="about-grid">
-                <div class="about-text slide-in-left">
-                    <p>I am a passionate creative developer who bridges the gap between design and engineering. My focus
-                        is on building interfaces that are not just functional, but genuinely inspiring.</p>
-                    <p>With a background in UI/UX and deep expertise in modern web technologies, I create digital
-                        experiences that feel alive, intuitive, and ahead of the curve.</p>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <span class="stat-num">2+</span>
-                            <span class="stat-label">Years Experience</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-num">50+</span>
-                            <span class="stat-label">Projects Completed</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-visual slide-in-right glass-card">
-                    <!-- Dashboard element mockup representing skills -->
-                    <div class="mock-terminal">
-                        <div class="term-header">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        <div class="term-body">
-                            <p>> init profile</p>
-                            <p class="success">Loading modules...</p>
-                            <p>> analyze skills</p>
-                            <p>[OK] UI/UX Design</p>
-                            <p>[OK] Frontend Architecture</p>
-                            <p>[OK] Interactive Animations</p>
-                            <p class="blink">_</p>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <h2 class="section-title reveal-text">01. About Me</h2>
+        <div class="about-grid">
+          <div class="about-text slide-in-left">
+            <p>
+              I am a passionate creative developer who bridges the gap between
+              design and engineering. My focus is on building interfaces that
+              are not just functional, but genuinely inspiring.
+            </p>
+            <p>
+              With a background in UI/UX and deep expertise in modern web
+              technologies, I create digital experiences that feel alive,
+              intuitive, and ahead of the curve.
+            </p>
+            <div class="stats">
+              <div class="stat-item">
+                <span class="stat-num">2+</span>
+                <span class="stat-label">Years Experience</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">50+</span>
+                <span class="stat-label">Projects Completed</span>
+              </div>
             </div>
+          </div>
+          <div class="about-visual slide-in-right glass-card">
+            <!-- Dashboard element mockup representing skills -->
+            <div class="mock-terminal">
+              <div class="term-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <div class="term-body">
+                <p>> init profile</p>
+                <p class="success">Loading modules...</p>
+                <p>> analyze skills</p>
+                <p>[OK] UI/UX Design</p>
+                <p>[OK] Frontend Architecture</p>
+                <p>[OK] Interactive Animations</p>
+                <p class="blink">_</p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Projects Section -->
     <section id="projects" class="projects section-padding">
-        <div class="container">
-            <h2 class="section-title reveal-text">02. Selected Work</h2>
-            <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="project-card glass-card fade-up">
-                    <div class="project-img-wrapper">
-                        <img src="portfolio 1.png" alt="Food Lover" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/food-lover/" target="_blank" class="project-link">Live
-                                Demo ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">Restaurant Website</span>
-                        <h3 class="project-title">Food Lover</h3>
-                        <p class="project-desc">A complete restaurant website featuring a dynamic menu, beautiful
-                            galleries, and a table booking interface.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="project-card glass-card fade-up" style="transition-delay: 0.1s;">
-                    <div class="project-img-wrapper">
-                        <img src="Portfolio 2.png" alt="Auto Zone" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/auto-zone/" target="_blank" class="project-link">Live Demo
-                                ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">Automotive</span>
-                        <h3 class="project-title">Auto Zone</h3>
-                        <p class="project-desc">A platform to find your perfect ride. It includes listings, user
-                            accounts, and an interface to add car ads.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card glass-card fade-up" style="transition-delay: 0.2s;">
-                    <div class="project-img-wrapper">
-                        <img src="Portfolio 3.png" alt="MobiZone" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/mobi-zone/" target="_blank" class="project-link">Live Demo
-                                ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">E-Commerce</span>
-                        <h3 class="project-title">MobiZone</h3>
-                        <p class="project-desc">A specialized electronics store for smartphones and headphones,
-                            featuring advanced filtering and special offers.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="project-card glass-card fade-up">
-                    <div class="project-img-wrapper">
-                        <img src="Portfolio 4.png" alt="Jewels" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/jewels-jewellery/" target="_blank"
-                                class="project-link">Live Demo ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">Luxury E-Commerce</span>
-                        <h3 class="project-title">Jewels</h3>
-                        <p class="project-desc">An elegant jewelry shop showcasing premium necklaces, rings, and
-                            bracelets with a sophisticated layout.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="project-card glass-card fade-up" style="transition-delay: 0.1s;">
-                    <div class="project-img-wrapper">
-                        <img src="Portfolio 5.png" alt="Medfit Shop" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/Medfit-Shop/" target="_blank" class="project-link">Live
-                                Demo ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">Medical Store</span>
-                        <h3 class="project-title">Medfit Shop</h3>
-                        <p class="project-desc">A trusted online pharmacy and medical supplies store featuring product
-                            categories, carts, and responsive design.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 6 -->
-                <div class="project-card glass-card fade-up" style="transition-delay: 0.2s;">
-                    <div class="project-img-wrapper">
-                        <img src="Portfolio 6.png" alt="Avatar" class="project-image">
-                        <div class="project-links">
-                            <a href="https://boda61.github.io/avatar/" target="_blank" class="project-link">Live Demo
-                                ↗</a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <span class="project-category">Movie Landing Page</span>
-                        <h3 class="project-title">Avatar Universe</h3>
-                        <p class="project-desc">A visually stunning landing page dedicated to the Avatar movie universe,
-                            featuring integrated video content.</p>
-                        <div class="tech-stack">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <h2 class="section-title reveal-text">02. Selected Work</h2>
+        <div class="projects-grid">
+          <!-- Project 1 -->
+          <div class="project-card glass-card fade-up">
+            <div class="project-img-wrapper">
+              <img
+                src="portfolio 1.png"
+                alt="Food Lover"
+                class="project-image"
+              />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/food-lover/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
             </div>
+            <div class="project-info">
+              <span class="project-category">Restaurant Website</span>
+              <h3 class="project-title">Food Lover</h3>
+              <p class="project-desc">
+                A complete restaurant website featuring a dynamic menu,
+                beautiful galleries, and a table booking interface.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div
+            class="project-card glass-card fade-up"
+            style="transition-delay: 0.1s"
+          >
+            <div class="project-img-wrapper">
+              <img
+                src="Portfolio 2.png"
+                alt="Auto Zone"
+                class="project-image"
+              />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/auto-zone/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-category">Automotive</span>
+              <h3 class="project-title">Auto Zone</h3>
+              <p class="project-desc">
+                A platform to find your perfect ride. It includes listings, user
+                accounts, and an interface to add car ads.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div
+            class="project-card glass-card fade-up"
+            style="transition-delay: 0.2s"
+          >
+            <div class="project-img-wrapper">
+              <img src="Portfolio 3.png" alt="MobiZone" class="project-image" />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/mobi-zone/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-category">E-Commerce</span>
+              <h3 class="project-title">MobiZone</h3>
+              <p class="project-desc">
+                A specialized electronics store for smartphones and headphones,
+                featuring advanced filtering and special offers.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="project-card glass-card fade-up">
+            <div class="project-img-wrapper">
+              <img src="Portfolio 4.png" alt="Jewels" class="project-image" />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/jewels-jewellery/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-category">Luxury E-Commerce</span>
+              <h3 class="project-title">Jewels</h3>
+              <p class="project-desc">
+                An elegant jewelry shop showcasing premium necklaces, rings, and
+                bracelets with a sophisticated layout.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 5 -->
+          <div
+            class="project-card glass-card fade-up"
+            style="transition-delay: 0.1s"
+          >
+            <div class="project-img-wrapper">
+              <img
+                src="Portfolio 5.png"
+                alt="Medfit Shop"
+                class="project-image"
+              />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/Medfit-Shop/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-category">Medical Store</span>
+              <h3 class="project-title">Medfit Shop</h3>
+              <p class="project-desc">
+                A trusted online pharmacy and medical supplies store featuring
+                product categories, carts, and responsive design.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 6 -->
+          <div
+            class="project-card glass-card fade-up"
+            style="transition-delay: 0.2s"
+          >
+            <div class="project-img-wrapper">
+              <img src="Portfolio 6.png" alt="Avatar" class="project-image" />
+              <div class="project-links">
+                <a
+                  href="https://boda61.github.io/avatar/"
+                  target="_blank"
+                  class="project-link"
+                  >Live Demo ↗</a
+                >
+              </div>
+            </div>
+            <div class="project-info">
+              <span class="project-category">Movie Landing Page</span>
+              <h3 class="project-title">Avatar Universe</h3>
+              <p class="project-desc">
+                A visually stunning landing page dedicated to the Avatar movie
+                universe, featuring integrated video content.
+              </p>
+              <div class="tech-stack">
+                <span>HTML5</span>
+                <span>CSS3</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Skills Section -->
     <section id="skills" class="skills section-padding">
-        <div class="container">
-            <h2 class="section-title reveal-text">03. Technical Arsenal</h2>
-            <div class="skills-wrapper">
-                <div class="skill-category glass-card fade-up">
-                    <h3 class="category-title">Core Development</h3>
-                    <ul class="skill-list">
-                        <li>JavaScript (ES6+)</li>
-                        <li>TypeScript</li>
-                        <li>Python</li>
-                        <li>HTML5 / CSS3</li>
-                    </ul>
-                </div>
-                <div class="skill-category glass-card fade-up" style="transition-delay: 0.1s;">
-                    <h3 class="category-title">Frameworks & Tools</h3>
-                    <ul class="skill-list">
-                        <li>React / Next.js</li>
-                        <li>Vue.js</li>
-                        <li>Node.js</li>
-                    </ul>
-                </div>
-                <div class="skill-category glass-card fade-up" style="transition-delay: 0.2s;">
-                    <h3 class="category-title">Design & UI</h3>
-                    <ul class="skill-list">
-                        <li>Figma / UI Design</li>
-                        <li>Framer Motion</li>
-                        <li>Tailwind CSS</li>
-                        <li>Responsive Design</li>
-                    </ul>
-                </div>
-            </div>
+      <div class="container">
+        <h2 class="section-title reveal-text">03. Technical Arsenal</h2>
+        <div class="skills-wrapper">
+          <div class="skill-category glass-card fade-up">
+            <h3 class="category-title">Core Development</h3>
+            <ul class="skill-list">
+              <li>JavaScript (ES6+)</li>
+              <li>TypeScript</li>
+              <li>Python</li>
+              <li>HTML5 / CSS3</li>
+            </ul>
+          </div>
+          <div
+            class="skill-category glass-card fade-up"
+            style="transition-delay: 0.1s"
+          >
+            <h3 class="category-title">Frameworks & Tools</h3>
+            <ul class="skill-list">
+              <li>React / Next.js</li>
+              <li>Vue.js</li>
+              <li>Node.js</li>
+            </ul>
+          </div>
+          <div
+            class="skill-category glass-card fade-up"
+            style="transition-delay: 0.2s"
+          >
+            <h3 class="category-title">Design & UI</h3>
+            <ul class="skill-list">
+              <li>Figma / UI Design</li>
+              <li>Framer Motion</li>
+              <li>Tailwind CSS</li>
+              <li>Responsive Design</li>
+            </ul>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact section-padding">
-        <div class="container">
-            <h2 class="section-title reveal-text">04. Get In Touch</h2>
-            <div class="contact-grid glass-card fade-in">
-                <div class="contact-info">
-                    <h3 class="contact-title">Let's build the future together.</h3>
-                    <p class="contact-desc">I'm currently open for new opportunities. Whether you have a question, a
-                        project idea, or just want to say hi, I'll try my best to get back to you!</p>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <span class="contact-icon">📧</span>
-                            <a href="mailto:apdallahm053@gmail.com">apdallahm053@gmail.com</a>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📍</span>
-                            <span>Cairo, Egypt</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="contact-form-container">
-                    <form id="contactForm" action="https://formsubmit.co/apdallahm053@gmail.com" method="POST"
-                        class="contact-form">
-                        <div class="form-group">
-                            <input type="text" name="name" id="name" required placeholder="Your Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" id="email" required placeholder="Your Email">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="subject" id="subject" required placeholder="Subject">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="message" id="message" rows="5" required
-                                placeholder="Your Message"></textarea>
-                        </div>
-                        <!-- formsubmit configurations -->
-                        <input type="hidden" name="_captcha" value="false">
-                        <button type="submit" id="submitBtn" class="btn-primary w-100">Send Message</button>
-                        <div id="formStatus" class="form-status"></div>
-                    </form>
-                </div>
+      <div class="container">
+        <h2 class="section-title reveal-text">04. Get In Touch</h2>
+        <div class="contact-grid glass-card fade-in">
+          <div class="contact-info">
+            <h3 class="contact-title">Let's build the future together.</h3>
+            <p class="contact-desc">
+              I'm currently open for new opportunities. Whether you have a
+              question, a project idea, or just want to say hi, I'll try my best
+              to get back to you!
+            </p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <span class="contact-icon">📧</span>
+                <a href="mailto:apdallahm053@gmail.com"
+                  >apdallahm053@gmail.com</a
+                >
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">📍</span>
+                <span>Cairo, Egypt</span>
+              </div>
             </div>
+          </div>
+          <div class="contact-form-container">
+            <form
+              id="contactForm"
+              action="https://formsubmit.co/apdallahm053@gmail.com"
+              method="POST"
+              class="contact-form"
+            >
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  required
+                  placeholder="Your Name"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  required
+                  placeholder="Your Email"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="subject"
+                  id="subject"
+                  required
+                  placeholder="Subject"
+                />
+              </div>
+              <div class="form-group">
+                <textarea
+                  name="message"
+                  id="message"
+                  rows="5"
+                  required
+                  placeholder="Your Message"
+                ></textarea>
+              </div>
+              <!-- formsubmit configurations -->
+              <input type="hidden" name="_captcha" value="false" />
+              <button type="submit" id="submitBtn" class="btn-primary w-100">
+                Send Message
+              </button>
+              <div id="formStatus" class="form-status"></div>
+            </form>
+          </div>
         </div>
+      </div>
     </section>
 
     <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="footer-logo">Apdallah<span>.</span></div>
-                    <p class="footer-desc">Bridging the gap between design and engineering to create futuristic,
-                        inspiring digital experiences.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link" title="GitHub">GH</a>
-                        <a href="#" class="social-link" title="LinkedIn">IN</a>
-                        <a href="#" class="social-link" title="Facebook">FB</a>
-                        <a href="#" class="social-link" title="Instagram">IS</a>
-                    </div>
-                </div>
-
-                <div class="footer-links-group">
-                    <h4 class="footer-heading">Quick Links</h4> 
-                    <ul class="footer-links">
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#projects">Work</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-links-group">
-                    <h4 class="footer-heading">Social</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">LinkedIn</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Instagram</a></li>
-                    </ul>
-                </div>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">Apdallah<span>.</span></div>
+            <p class="footer-desc">
+              Bridging the gap between design and engineering to create
+              futuristic, inspiring digital experiences.
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-link" title="GitHub">GH</a>
+              <a href="#" class="social-link" title="LinkedIn">IN</a>
+              <a href="#" class="social-link" title="Facebook">FB</a>
+              <a href="#" class="social-link" title="Instagram">IS</a>
             </div>
+          </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2026 Apdallah Mohamed. All rights reserved.</p>
-                <p class="footer-tagline">Designed & built with passion in the digital realm.</p>
-            </div>
+          <div class="footer-links-group">
+            <h4 class="footer-heading">Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#hero">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#projects">Work</a></li>
+              <li><a href="#skills">Skills</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-links-group">
+            <h4 class="footer-heading">Social</h4>
+            <ul class="footer-links">
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">Facebook</a></li>
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">Instagram</a></li>
+            </ul>
+          </div>
         </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2026 Apdallah Mohamed. All rights reserved.</p>
+          <p class="footer-tagline">
+            Designed & built with passion in the digital realm.
+          </p>
+        </div>
+      </div>
     </footer>
 
     <!-- Supabase SDK & Config -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
