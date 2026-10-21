@@ -1381,74 +1381,205 @@ a {
 }
 
 @media (max-width: 900px) {
-    .nav-stepper-wrap {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100vh;
-        width: 280px;
-        background: rgba(3, 3, 5, 0.98);
-        backdrop-filter: blur(20px);
-        margin: 0;
-        padding: 5rem 2rem 2rem;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 99;
-        border-left: 1px solid var(--border-color);
+    .navbar {
+        padding: 0.5rem 0;
     }
 
-    .nav-stepper-wrap.active {
-        right: 0;
+    .nav-container {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    .stepper-rail-line,
-    .stepper-rail-progress,
-    .stepper-indicator {
-        display: none;
+    .brand-logo {
+        order: 1;
+        gap: 0.5rem;
     }
 
-    .nav-steps {
-        flex-direction: column;
-        gap: 1.5rem;
-        width: 100%;
+    .brand-mark {
+        width: 30px;
+        height: 30px;
     }
 
-    .nav-step {
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        width: 100%;
+    .brand-mark svg {
+        width: 18px;
+        height: 18px;
     }
 
-    .nav-step .step-num {
-        font-size: 0.85rem;
-    }
-
-    .nav-step .step-label {
+    .brand-title {
         font-size: 1rem;
+        letter-spacing: 1px;
     }
 
-    .step-tick {
-        display: none;
+    .brand-subtitle {
+        font-size: 0.55rem;
+        letter-spacing: 1.5px;
     }
 
-    .nav-step.active::before {
-        display: none;
-    }
-
-    .nav-step.active {
-        border-bottom-color: var(--secondary);
-    }
-
-    .hamburger {
-        display: flex;
-        z-index: 1002;
+    .nav-actions {
+        order: 2;
+        gap: 0.5rem;
     }
 
     .nav-pill-btn {
-        padding: 0.45rem 1rem;
-        font-size: 0.8rem;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.75rem;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    /* Stepper full width underneath in row 2 */
+    .nav-stepper-wrap {
+        order: 3;
+        position: relative;
+        top: auto;
+        right: auto;
+        height: auto;
+        width: 100%;
+        max-width: 100%;
+        margin: 0.25rem 0 0;
+        padding: 0.2rem 0.5rem 0.6rem;
+        background: transparent;
+        backdrop-filter: none;
+        border-left: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .stepper-rail-line {
+        display: block !important;
+        position: absolute;
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: -2px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+        z-index: 1;
+    }
+
+    .stepper-rail-progress {
+        display: block !important;
+        position: absolute;
+        left: 0.5rem;
+        bottom: -2px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        box-shadow: 0 0 8px var(--secondary-glow);
+        z-index: 2;
+        pointer-events: none;
+        transition: width 0.05s ease-out;
+    }
+
+    .stepper-indicator {
+        display: flex !important;
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 24px;
+        height: 12px;
+        margin-left: -12px;
+        pointer-events: none;
+        z-index: 5;
+        transition: transform 0.05s ease-out;
+    }
+
+    .indicator-glow {
+        width: 20px;
+        height: 2px;
+        bottom: 4px;
+    }
+
+    .indicator-tick {
+        width: 2px;
+        height: 9px;
+        bottom: 0;
+    }
+
+    .nav-steps {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-step {
+        padding-bottom: 6px;
+        border-bottom: none;
+        width: auto;
+        flex: 1;
+        text-align: center;
+    }
+
+    .nav-step a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        text-decoration: none;
+    }
+
+    .nav-step .step-num {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0;
+    }
+
+    .nav-step .step-label {
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0;
+    }
+
+    .step-tick {
+        display: block !important;
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.2);
+        z-index: 3;
+    }
+
+    .nav-step:hover .step-tick,
+    .nav-step.active .step-tick {
+        background: var(--secondary);
+        height: 7px;
+        bottom: -6px;
+        box-shadow: 0 0 6px var(--secondary-glow);
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 0.5rem;
+    }
+
+    .nav-step .step-num {
+        font-size: 0.6rem;
+    }
+
+    .nav-step .step-label {
+        font-size: 0.62rem;
+    }
+
+    .top-announcement {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .announcement-badge {
+        font-size: 0.62rem;
+        padding: 0.1rem 0.35rem;
     }
 }
 

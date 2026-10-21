@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let stepCenters = [];
 
     function updateStepCoordinates() {
-        if (!navStepperWrap || window.innerWidth <= 900) return;
+        if (!navStepperWrap) return;
         const wrapRect = navStepperWrap.getBoundingClientRect();
         stepCenters = Array.from(navStepItems).map(item => {
             const itemRect = item.getBoundingClientRect();
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isTicking = false;
 
     function updateStepperIndicator() {
-        if (!navStepperWrap || window.innerWidth <= 900 || stepCenters.length < 2) return;
+        if (!navStepperWrap || stepCenters.length < 2) return;
 
         const scrollY = window.scrollY;
         const headerOffset = siteHeader ? siteHeader.offsetHeight + 10 : 90;
@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("scroll", onScrollStepper, { passive: true });
     window.addEventListener("resize", updateStepCoordinates);
+    window.addEventListener("orientationchange", () => setTimeout(updateStepCoordinates, 150));
 
     // Initial calculation after fonts and layout render
     setTimeout(updateStepCoordinates, 150);
