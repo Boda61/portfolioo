@@ -744,6 +744,12 @@ a {
     pointer-events: none;
 }
 
+/* Allow card interaction to pass through the non-interactive container */
+.hero-visual .hanging-card {
+    pointer-events: auto;
+    touch-action: none;
+}
+
 .hanging-stage {
     position: relative;
     width: 100%;
@@ -1777,9 +1783,14 @@ a {
         display: flex !important;
         justify-content: center !important;
         align-items: flex-start !important;
-        pointer-events: none !important;
+        pointer-events: none;
         z-index: 5 !important;
         flex-shrink: 0 !important;
+    }
+
+    .hero-visual .hanging-card {
+        pointer-events: auto !important;
+        touch-action: none;
     }
 
     .hanging-anchor {
@@ -1835,6 +1846,11 @@ a {
         max-width: 290px !important;
         height: 490px !important;
         margin-bottom: 1rem !important;
+    }
+
+    .hero-visual .hanging-card {
+        pointer-events: auto !important;
+        touch-action: none;
     }
 
     .hanging-card {

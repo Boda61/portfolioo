@@ -560,6 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- POINTER INTERACTIONS (DRAGGING) ---
         card.addEventListener("pointerdown", (e) => {
             if (e.button !== 0 && e.pointerType === "mouse") return;
+            e.preventDefault(); // Prevent scroll/pan interference on touch devices
 
             isDragging = true;
             dragPointerId = e.pointerId;
