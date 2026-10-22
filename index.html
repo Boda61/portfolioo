@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=3.1" />
   </head>
 
   <body>
@@ -167,18 +167,88 @@
           <a href="#contact" class="btn-secondary">Let's Talk</a>
         </div>
       </div>
-      <div class="hero-visual fade-in">
-        <!-- 3D Profile Image Container -->
-        <div class="profile-3d-wrapper">
-          <div class="profile-image-container">
-            <!-- You can replace the src below with your actual image path -->
-            <img
-              src="generation-f0f658ee-6474-489f-b072-ed21158cec54.png"
-              alt="Apdallah Mohamed"
-              class="profile-img"
-              id="profile3d"
-            />
-            <div class="profile-glow"></div>
+      <div class="hero-visual fade-in" id="heroVisual">
+        <!-- Hanging 3D Card Physics Stage (Inspired by 3D_CARD concept) -->
+        <div class="hanging-stage" id="hangingStage">
+          <!-- Fixed Anchor Mount -->
+          <div class="hanging-anchor" id="hangingAnchor" aria-hidden="true">
+            <span class="anchor-plate"></span>
+            <span class="anchor-screw"></span>
+          </div>
+
+          <!-- Dynamic SVG Fabric Lanyard -->
+          <svg class="hanging-cord-svg" id="hangingCordSvg" aria-hidden="true">
+            <defs>
+              <filter id="lanyardShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.65" />
+              </filter>
+            </defs>
+            <!-- Black Woven Fabric Strap -->
+            <path id="lanyardPath" d="M 0 0 L 0 0" class="lanyard-strap" filter="url(#lanyardShadow)" />
+            <!-- Edge Stitches for realistic fabric texture -->
+            <path id="lanyardStitchLeft" d="M 0 0 L 0 0" class="lanyard-stitch" />
+            <path id="lanyardStitchRight" d="M 0 0 L 0 0" class="lanyard-stitch" />
+            <!-- Printed Typography along the Lanyard Strap -->
+            <text class="lanyard-text" dy="3">
+              <textPath id="lanyardTextPath" href="#lanyardPath" startOffset="50%" text-anchor="middle">
+                ABDULLAH &bull; DEVELOPER &bull; 3D CARD
+              </textPath>
+            </text>
+          </svg>
+
+          <!-- Physical Hanging Portrait Card -->
+          <div
+            class="hanging-card"
+            id="hangingCard"
+            role="region"
+            aria-label="Interactive 3D Portrait Card of Abdullah Mohamed"
+          >
+            <!-- Dark Metal Connector (Clamp & Ring joining lanyard to card) -->
+            <div class="card-connector" aria-hidden="true">
+              <span class="connector-strap-clamp"></span>
+              <span class="connector-metal-ring"></span>
+              <span class="connector-card-bracket"></span>
+            </div>
+
+            <!-- Card Body with Vibrant Teal/Turquoise Portrait Design -->
+            <div class="card-inner">
+              <!-- Rich Teal/Turquoise Background Backdrop -->
+              <div class="card-art-backdrop" aria-hidden="true">
+                <div class="teal-gradient-mesh"></div>
+                <div class="art-grid-overlay"></div>
+              </div>
+
+              <!-- Prominent Portrait Image -->
+              <div class="card-photo-container">
+                <img
+                  src="generation-f0f658ee-6474-489f-b072-ed21158cec54.png"
+                  alt="Abdullah Mohamed"
+                  class="card-portrait"
+                  id="profile3d"
+                  draggable="false"
+                />
+                <div class="portrait-edge-gradient" aria-hidden="true"></div>
+              </div>
+
+              <!-- Restrained Minimal Portfolio Typography -->
+              <div class="card-info-overlay">
+                <div class="card-top-tag">
+                  <span class="tag-label">PORTFOLIO // 2026</span>
+                  <span class="tag-status">AVAILABLE</span>
+                </div>
+
+                <div class="card-bottom-profile">
+                  <h3 class="card-name">ABDULLAH MOHAMED</h3>
+                  <p class="card-role">FRONT-END DEVELOPER</p>
+                  <div class="card-meta-row" aria-hidden="true">
+                    <span class="card-meta-code">UI ARCHITECTURE &bull; CREATIVE DEV</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Glossy Specular Surface Reflection -->
+              <div class="card-gloss-highlight" aria-hidden="true"></div>
+            </div>
           </div>
         </div>
       </div>

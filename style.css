@@ -728,90 +728,371 @@ a {
     gap: 1.5rem;
 }
 
+/* --- HERO VISUAL & HANGING ID CARD --- */
 .hero-visual {
     position: absolute;
     right: 5%;
+    top: 0;
+    bottom: 0;
+    width: 440px;
+    max-width: 45vw;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+}
+
+.hanging-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Fixed Ceiling Anchor Pin */
+.hanging-anchor {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #b0b4c0 45%, #2a2d36 100%);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 210, 255, 0.25);
+    z-index: 12;
+    pointer-events: none;
+}
+
+.anchor-plate {
+    position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    width: 40vw;
-    height: 60vh;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* --- 3D PROFILE IMAGE --- */
-.profile-3d-wrapper {
-    perspective: 1000px;
-    width: 320px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    animation: floatProfile 6s infinite alternate ease-in-out;
+.anchor-screw {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #111318;
 }
 
-.profile-image-container {
+/* SVG Hanging Fabric Lanyard (Inspired by 3D_CARD reference) */
+.hanging-cord-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    position: relative;
-    border-radius: 24px;
+    pointer-events: none;
+    z-index: 11;
+    overflow: visible;
+}
+
+.lanyard-strap {
+    stroke: #0a0c10;
+    stroke-width: 16px;
+    stroke-linecap: square;
+    fill: none;
+}
+
+.lanyard-stitch {
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 1px;
+    stroke-dasharray: 4, 3;
+    fill: none;
+}
+
+.lanyard-text {
+    fill: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 7.2px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.88;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Hanging Physical 3D Portrait Card */
+.hanging-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 380px;
+    border-radius: 16px;
+    background: #041017;
+    color: #ffffff;
+    padding: 0;
+    box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.9),
+                0 10px 25px -5px rgba(0, 210, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: auto;
+    z-index: 13;
+    transform-origin: 50% 0%;
+    will-change: transform;
     transform-style: preserve-3d;
-    transform: rotateX(5deg) rotateY(-5deg);
-    transition: transform 0.5s ease-out;
+    transition: box-shadow 0.25s ease;
 }
 
-.profile-img {
+.hanging-card:hover {
+    box-shadow: 0 35px 85px -10px rgba(0, 0, 0, 0.95),
+                0 15px 35px -5px rgba(0, 210, 255, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.hanging-card:active,
+.hanging-card.is-dragging {
+    cursor: grabbing;
+    box-shadow: 0 45px 95px -12px rgba(0, 0, 0, 0.98),
+                0 20px 45px -5px rgba(0, 210, 255, 0.45);
+}
+
+.hanging-card.is-interacting {
+    touch-action: none;
+}
+
+/* Small Dark Metal Connector (Clamp & Ring joining lanyard to card) */
+.card-connector {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.connector-strap-clamp {
+    width: 18px;
+    height: 6px;
+    background: linear-gradient(180deg, #2c303a 0%, #111216 100%);
+    border-radius: 2px;
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.65);
+}
+
+.connector-metal-ring {
+    width: 10px;
+    height: 7px;
+    border: 2px solid #3c404c;
+    border-radius: 50%;
+    background: transparent;
+    margin: -1px 0;
+}
+
+.connector-card-bracket {
+    width: 14px;
+    height: 6px;
+    background: linear-gradient(180deg, #343844 0%, #14161c 100%);
+    border-radius: 1px 1px 3px 3px;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+
+/* Card Inner Frame */
+.card-inner {
+    position: relative;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
     border-radius: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    position: relative;
-    z-index: 2;
-    background: var(--bg-surface);
-    transform: translateZ(30px);
 }
 
-.profile-glow {
+/* Rich Teal / Turquoise Background Backdrop */
+.card-art-backdrop {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    filter: blur(50px);
-    opacity: 0.6;
+    background: linear-gradient(145deg, #031820 0%, #064b5b 35%, #00a4b4 70%, #00e5c9 100%);
     z-index: 1;
+}
+
+.teal-gradient-mesh {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 70% 25%, rgba(0, 255, 204, 0.45) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.35) 0%, transparent 55%);
+    mix-blend-mode: screen;
+}
+
+.art-grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 16px 16px;
+    opacity: 0.35;
+}
+
+/* Portrait Photo Container */
+.card-photo-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.card-portrait {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    pointer-events: none;
+    filter: contrast(1.08) brightness(1.02);
+}
+
+.portrait-edge-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, 
+        rgba(3, 16, 22, 0.25) 0%, 
+        transparent 35%, 
+        rgba(2, 12, 18, 0.65) 68%, 
+        rgba(2, 8, 12, 0.95) 100%);
+    pointer-events: none;
+}
+
+/* Card Typography & Restrained Details */
+.card-info-overlay {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 16px 14px;
+    pointer-events: none;
+}
+
+.card-top-tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tag-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+.tag-status {
+    background: rgba(0, 255, 204, 0.15);
+    color: #00ffcc;
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    padding: 2.5px 7.5px;
+    border-radius: 9999px;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+}
+
+.card-bottom-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: linear-gradient(180deg, transparent 0%, rgba(2, 8, 12, 0.75) 30%, rgba(2, 8, 12, 0.96) 100%);
+    margin: -10px -16px -14px;
+    padding: 22px 16px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.card-name {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    line-height: 1.15;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.card-role {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #00ffcc;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.card-meta-row {
+    margin-top: 4px;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.card-meta-code {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.8px;
+    font-weight: 500;
+}
+
+/* Glass Specular Surface Reflection */
+.card-gloss-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: inherit;
-    transform: translateZ(-20px);
-    animation: pulseGlow 4s infinite alternate;
+    background: linear-gradient(125deg, 
+        rgba(255, 255, 255, 0.28) 0%, 
+        rgba(255, 255, 255, 0.04) 38%, 
+        transparent 58%);
+    pointer-events: none;
+    z-index: 4;
 }
 
-@keyframes floatProfile {
-    0% {
-        transform: translateY(0px);
-    }
-
-    100% {
-        transform: translateY(-20px);
-    }
-}
-
-@keyframes pulseGlow {
-    0% {
-        opacity: 0.5;
-        transform: translateZ(-20px) scale(0.95);
-    }
-
-    100% {
-        opacity: 0.8;
-        transform: translateZ(-20px) scale(1.05);
-    }
-}
 
 /* --- ABOUT SECTION --- */
 .about-grid {
@@ -1329,7 +1610,7 @@ a {
 }
 
 /* --- RESPONSIVE DESIGN --- */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
     .about-grid {
         grid-template-columns: 1fr;
     }
@@ -1340,246 +1621,259 @@ a {
         padding: 2rem;
     }
 
-    .hero-title {
-        font-size: 3.5rem;
+    /* Mobile & iPad Header */
+    .top-announcement {
+        display: none !important;
     }
 
-    .hero {
+    .navbar {
+        padding: 0.85rem 0;
+        background: rgba(4, 8, 16, 0.88);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .brand-logo {
+        order: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .nav-actions {
+        order: 2;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-actions .nav-pill-btn {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 5px;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 1002;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: #ffffff;
+        border-radius: 2px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Mobile & iPad Drawer Navigation */
+    .nav-stepper-wrap {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        max-width: 80vw;
+        height: 100vh;
+        height: 100dvh;
+        background: rgba(5, 10, 20, 0.97);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 3rem 2rem;
+        transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        z-index: 1001;
+        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
+    }
+
+    .nav-stepper-wrap.active {
+        right: 0;
+    }
+
+    .nav-stepper-wrap .nav-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .nav-stepper-wrap .nav-step {
+        padding: 0;
+        width: 100%;
+    }
+
+    .nav-stepper-wrap .nav-step a {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.15rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: var(--font-mono);
+        text-decoration: none;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-stepper-wrap .nav-step.active a,
+    .nav-stepper-wrap .nav-step:hover a {
+        color: #00ffcc;
+        transform: translateX(4px);
+    }
+
+    .nav-stepper-wrap .stepper-rail-line,
+    .nav-stepper-wrap .stepper-rail-progress,
+    .nav-stepper-wrap .stepper-indicator,
+    .nav-stepper-wrap .step-tick {
+        display: none !important;
+    }
+
+    /* iPad & Mobile Hero Layout: Zero Overlap */
+    .hero {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        padding: 85px 1.5rem 5rem !important;
         text-align: center;
-        padding-top: 120px;
-        height: auto;
-        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        background: radial-gradient(ellipse at 50% 30%, #0a1830 0%, #030711 78%);
+    }
+
+    .hero-visual {
+        order: 1 !important;
+        position: relative !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 330px !important;
+        height: 535px !important;
+        margin: 0 auto 1.5rem !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        pointer-events: none !important;
+        z-index: 5 !important;
+        flex-shrink: 0 !important;
+    }
+
+    .hanging-anchor {
+        top: 15px;
+        left: 50%;
+    }
+
+    .hanging-card {
+        width: 230px;
+        height: 336px;
+    }
+
+    .card-name {
+        font-size: 1.05rem;
     }
 
     .hero-content {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+        order: 2 !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        margin: 1.5rem auto 0 !important;
+        max-width: 580px !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+        z-index: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+    }
+
+    .hero-title {
+        font-size: 3.2rem;
     }
 
     .hero-cta {
         justify-content: center;
     }
-
-    .hero-visual {
-        position: relative;
-        right: auto;
-        top: auto;
-        transform: none;
-        width: 100%;
-        height: auto;
-        margin-top: 3rem;
-        margin-bottom: 3rem;
-    }
-
-    .profile-3d-wrapper {
-        width: 250px;
-        height: 312px;
-    }
-}
-
-@media (max-width: 900px) {
-    .navbar {
-        padding: 0.5rem 0;
-    }
-
-    .nav-container {
-        flex-wrap: wrap;
-        padding: 0 1rem;
-        gap: 0.5rem;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .brand-logo {
-        order: 1;
-        gap: 0.5rem;
-    }
-
-    .brand-mark {
-        width: 30px;
-        height: 30px;
-    }
-
-    .brand-mark svg {
-        width: 18px;
-        height: 18px;
-    }
-
-    .brand-title {
-        font-size: 1rem;
-        letter-spacing: 1px;
-    }
-
-    .brand-subtitle {
-        font-size: 0.55rem;
-        letter-spacing: 1.5px;
-    }
-
-    .nav-actions {
-        order: 2;
-        gap: 0.5rem;
-    }
-
-    .nav-pill-btn {
-        padding: 0.35rem 0.9rem;
-        font-size: 0.75rem;
-    }
-
-    .hamburger {
-        display: none;
-    }
-
-    /* Stepper full width underneath in row 2 */
-    .nav-stepper-wrap {
-        order: 3;
-        position: relative;
-        top: auto;
-        right: auto;
-        height: auto;
-        width: 100%;
-        max-width: 100%;
-        margin: 0.25rem 0 0;
-        padding: 0.2rem 0.5rem 0.6rem;
-        background: transparent;
-        backdrop-filter: none;
-        border-left: none;
-        display: flex;
-        align-items: center;
-    }
-
-    .stepper-rail-line {
-        display: block !important;
-        position: absolute;
-        left: 0.5rem;
-        right: 0.5rem;
-        bottom: -2px;
-        height: 1px;
-        background: rgba(255, 255, 255, 0.12);
-        z-index: 1;
-    }
-
-    .stepper-rail-progress {
-        display: block !important;
-        position: absolute;
-        left: 0.5rem;
-        bottom: -2px;
-        height: 2px;
-        background: linear-gradient(90deg, var(--primary), var(--secondary));
-        box-shadow: 0 0 8px var(--secondary-glow);
-        z-index: 2;
-        pointer-events: none;
-        transition: width 0.05s ease-out;
-    }
-
-    .stepper-indicator {
-        display: flex !important;
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 24px;
-        height: 12px;
-        margin-left: -12px;
-        pointer-events: none;
-        z-index: 5;
-        transition: transform 0.05s ease-out;
-    }
-
-    .indicator-glow {
-        width: 20px;
-        height: 2px;
-        bottom: 4px;
-    }
-
-    .indicator-tick {
-        width: 2px;
-        height: 9px;
-        bottom: 0;
-    }
-
-    .nav-steps {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0;
-        padding: 0;
-        margin: 0;
-    }
-
-    .nav-step {
-        padding-bottom: 6px;
-        border-bottom: none;
-        width: auto;
-        flex: 1;
-        text-align: center;
-    }
-
-    .nav-step a {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1px;
-        text-decoration: none;
-    }
-
-    .nav-step .step-num {
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0;
-    }
-
-    .nav-step .step-label {
-        font-size: 0.68rem;
-        font-weight: 500;
-        letter-spacing: 0;
-    }
-
-    .step-tick {
-        display: block !important;
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 1px;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.2);
-        z-index: 3;
-    }
-
-    .nav-step:hover .step-tick,
-    .nav-step.active .step-tick {
-        background: var(--secondary);
-        height: 7px;
-        bottom: -6px;
-        box-shadow: 0 0 6px var(--secondary-glow);
-    }
 }
 
 @media (max-width: 480px) {
     .nav-container {
-        padding: 0 0.5rem;
+        padding: 0.75rem 1.15rem;
     }
 
-    .nav-step .step-num {
-        font-size: 0.6rem;
+    .hero {
+        padding: 75px 0.8rem 4rem !important;
     }
 
-    .nav-step .step-label {
-        font-size: 0.62rem;
+    .hero-visual {
+        max-width: 290px !important;
+        height: 490px !important;
+        margin-bottom: 1rem !important;
     }
 
-    .top-announcement {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.5rem;
+    .hanging-card {
+        width: 215px !important;
+        height: 315px !important;
     }
 
-    .announcement-badge {
-        font-size: 0.62rem;
-        padding: 0.1rem 0.35rem;
+    .card-name {
+        font-size: 0.98rem;
+    }
+
+    .hero-content {
+        margin-top: 1rem !important;
+        padding: 0 0.5rem !important;
+    }
+
+    .hero-title {
+        font-size: 2.3rem !important;
+    }
+
+    .hero-job {
+        font-size: 1.25rem !important;
+    }
+}
+
+@media (max-height: 720px) and (max-width: 1024px) {
+    .hero-visual {
+        height: 440px !important;
+    }
+
+    .hanging-card {
+        width: 195px !important;
+        height: 284px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hanging-card {
+        transition: none !important;
     }
 }
 

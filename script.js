@@ -315,31 +315,435 @@ document.addEventListener("DOMContentLoaded", () => {
     initParticles();
     animateParticles();
 
-    // --- 3D PROFILE IMAGE TILT EFFECT ---
-    const profileContainer = document.querySelector('.profile-image-container');
-    const heroVisual = document.querySelector('.hero-visual');
+    // ==========================================
+    // HANGING 3D CARD PHYSICS & INTERACTION
+    // Inspired by 3D_CARD (github.com/fattahmaulana/3D_CARD) & @pmndrs
+    // Adapted into ultra-lightweight Vanilla JS physics engine
+    // ==========================================
+    function initHangingCard() {
+        const stage = document.getElementById("hangingStage");
+        const anchor = document.getElementById("hangingAnchor");
+        const card = document.getElementById("hangingCard");
+        const lanyardPath = document.getElementById("lanyardPath");
+        const lanyardStitchLeft = document.getElementById("lanyardStitchLeft");
+        const lanyardStitchRight = document.getElementById("lanyardStitchRight");
 
-    if (heroVisual && profileContainer) {
-        heroVisual.addEventListener('mousemove', (e) => {
-            const rect = heroVisual.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        if (!stage || !anchor || !card || !lanyardPath) return;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+        let stageWidth = stage.offsetWidth;
+        let anchorX = stageWidth / 2;
+        let anchorY = window.innerWidth <= 992 ? 15 : 40;
 
-            const rotateX = ((y - centerY) / centerY) * -15; // Max 15 deg tilt
-            const rotateY = ((x - centerX) / centerX) * 15;
+        function getRestLength() {
+            const vh = window.innerHeight;
+            const vw = window.innerWidth;
+            if (vw <= 480) {
+                // Generous long suspended lanyard matching the reference screenshot
+                return Math.max(135, Math.min(vh * 0.22, 175));
+            }
+            if (vw <= 992) {
+                return Math.max(150, Math.min(vh * 0.24, 195));
+            }
+            return 175;
+        }
 
-            profileContainer.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            profileContainer.style.transition = 'none';
+        let restLength = getRestLength();
+        let cardHalfWidth = card.offsetWidth / 2 || (window.innerWidth <= 480 ? 105 : (window.innerWidth <= 992 ? 115 : 130));
+
+        function updateAnchor() {
+            stageWidth = stage.offsetWidth;
+            cardHalfWidth = card.offsetWidth / 2 || (window.innerWidth <= 480 ? 105 : (window.innerWidth <= 992 ? 115 : 130));
+            restLength = getRestLength();
+            if (anchor) {
+                anchorX = anchor.offsetLeft + anchor.offsetWidth / 2;
+                anchorY = anchor.offsetTop + anchor.offsetHeight / 2;
+            } else {
+                anchorX = stageWidth / 2;
+                anchorY = window.innerWidth <= 992 ? 15 : 40;
+            }
+        }
+
+        updateAnchor();
+
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        // Simulation State
+        // (x, y) = attachment point at card top-center in stage coordinates
+        let x = anchorX;
+        let y = anchorY + restLength;
+        let vx = 0;
+        let vy = 0;
+        let angle = 0;
+        let angleVelocity = 0;
+
+        let isDragging = false;
+        let dragPointerId = null;
+        let dragStartPointerX = 0;
+        let dragStartPointerY = 0;
+        let dragStartCardX = 0;
+        let dragStartCardY = 0;
+        let lastPointerX = 0;
+        let lastPointerY = 0;
+        let lastPointerTime = 0;
+        let pointerVx = 0;
+        let pointerVy = 0;
+
+        // 3D Hover Tilt State
+        let hoverTiltX = 0;
+        let hoverTiltY = 0;
+        let hoverTiltActive = false;
+
+        // Physics parameters (Spring-pendulum model)
+        const gravity = 2000;       // px/s^2
+        const cordStiffness = 380;  // Tension spring when dist > restLength
+        const cordDamping = 18;     // Damping along the cord axis
+        const airResistance = 0.65; // Pendulum lateral air drag
+        const angularDamping = 4.5; // Damping for card rotation
+
+        let isRunning = false;
+        let lastFrameTime = performance.now();
+
+        function render() {
+            // 1. Render black fabric lanyard strap
+            lanyardPath.setAttribute("d", `M ${anchorX.toFixed(1)} ${anchorY.toFixed(1)} L ${x.toFixed(1)} ${y.toFixed(1)}`);
+
+            // 2. Render edge stitch dashed lines
+            if (lanyardStitchLeft && lanyardStitchRight) {
+                const dx = x - anchorX;
+                const dy = y - anchorY;
+                const dist = Math.hypot(dx, dy) || 1;
+                const nx = -dy / dist;
+                const ny = dx / dist;
+                const offset = 6.2;
+
+                const ax1 = (anchorX + nx * offset).toFixed(1);
+                const ay1 = (anchorY + ny * offset).toFixed(1);
+                const x1 = (x + nx * offset).toFixed(1);
+                const y1 = (y + ny * offset).toFixed(1);
+
+                const ax2 = (anchorX - nx * offset).toFixed(1);
+                const ay2 = (anchorY - ny * offset).toFixed(1);
+                const x2 = (x - nx * offset).toFixed(1);
+                const y2 = (y - ny * offset).toFixed(1);
+
+                lanyardStitchLeft.setAttribute("d", `M ${ax1} ${ay1} L ${x1} ${y1}`);
+                lanyardStitchRight.setAttribute("d", `M ${ax2} ${ay2} L ${x2} ${y2}`);
+            }
+
+            // 3. Card transform with 3D tilt
+            const left = x - cardHalfWidth;
+            const top = y;
+            const angleDeg = (angle * (180 / Math.PI)).toFixed(2);
+
+            let tiltX = 0;
+            let tiltY = 0;
+
+            if (isDragging) {
+                tiltX = Math.max(-16, Math.min(16, -pointerVy * 0.012));
+                tiltY = Math.max(-22, Math.min(22, pointerVx * 0.015));
+            } else {
+                tiltX = Math.max(-14, Math.min(14, (vy * 0.005) + (angle * -8)));
+                tiltY = Math.max(-18, Math.min(18, (vx * 0.01) + (angle * 12)));
+            }
+
+            if (!isDragging && hoverTiltActive) {
+                tiltX += hoverTiltX;
+                tiltY += hoverTiltY;
+            }
+
+            card.style.transform = `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0) rotateZ(${angleDeg}deg) rotateX(${tiltX.toFixed(1)}deg) rotateY(${tiltY.toFixed(1)}deg)`;
+        }
+
+        function stepPhysics(dt) {
+            if (isDragging) {
+                const dx = x - anchorX;
+                const dy = y - anchorY;
+                const cordAngle = Math.atan2(dx, dy);
+                const velocityTilt = Math.max(-0.35, Math.min(0.35, -pointerVx * 0.00035));
+                angle = cordAngle + velocityTilt;
+                angleVelocity = 0;
+                return;
+            }
+
+            // Substepping for rock-solid stability and smoothness
+            const subSteps = 4;
+            const subDt = dt / subSteps;
+
+            for (let s = 0; s < subSteps; s++) {
+                const dx = x - anchorX;
+                const dy = y - anchorY;
+                const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                let fx = 0;
+                let fy = gravity; // Gravity always pulls downwards
+
+                // Cord tension engages when stretched beyond restLength
+                if (dist > restLength) {
+                    const stretch = dist - restLength;
+                    const radialVel = vx * nx + vy * ny;
+                    const tensionMag = cordStiffness * stretch + cordDamping * radialVel;
+                    const clampedTension = Math.max(0, tensionMag);
+
+                    fx -= clampedTension * nx;
+                    fy -= clampedTension * ny;
+                }
+
+                // Air resistance
+                fx -= airResistance * vx;
+                fy -= airResistance * vy;
+
+                // Numerical integration
+                vx += fx * subDt;
+                vy += fy * subDt;
+                x += vx * subDt;
+                y += vy * subDt;
+
+                // Card rotation dynamic alignment
+                const targetAngle = Math.atan2(dx, dy);
+                let diff = targetAngle - angle;
+                while (diff > Math.PI) diff -= Math.PI * 2;
+                while (diff < -Math.PI) diff += Math.PI * 2;
+
+                const angularSpring = 85;
+                const angularAcc = diff * angularSpring - angularDamping * angleVelocity;
+                angleVelocity += angularAcc * subDt;
+                angle += angleVelocity * subDt;
+            }
+
+            // Boundary constraints so card stays on screen
+            const boundLimit = Math.max(window.innerWidth * 0.45, 260);
+            if (x < anchorX - boundLimit) { x = anchorX - boundLimit; vx = 0; }
+            if (x > anchorX + boundLimit) { x = anchorX + boundLimit; vx = 0; }
+            if (y < anchorY - 60) { y = anchorY - 60; vy = Math.max(0, vy); }
+
+            // Sleep detection when motion settles completely
+            const speedSq = vx * vx + vy * vy;
+            const distFromRest = Math.hypot(x - anchorX, y - (anchorY + restLength));
+            const angleSpeed = Math.abs(angleVelocity);
+            const angleDiffRest = Math.abs(angle);
+
+            if (speedSq < 0.05 && distFromRest < 0.5 && angleSpeed < 0.01 && angleDiffRest < 0.005) {
+                x = anchorX;
+                y = anchorY + restLength;
+                vx = 0;
+                vy = 0;
+                angle = 0;
+                angleVelocity = 0;
+                isRunning = false;
+            }
+        }
+
+        function loop(now) {
+            if (!isRunning) return;
+
+            const dt = Math.min((now - lastFrameTime) / 1000, 0.033);
+            lastFrameTime = now;
+
+            stepPhysics(dt);
+            render();
+
+            if (isRunning) {
+                requestAnimationFrame(loop);
+            }
+        }
+
+        function wakeLoop() {
+            if (!isRunning) {
+                isRunning = true;
+                lastFrameTime = performance.now();
+                requestAnimationFrame(loop);
+            }
+        }
+
+        // --- POINTER INTERACTIONS (DRAGGING) ---
+        card.addEventListener("pointerdown", (e) => {
+            if (e.button !== 0 && e.pointerType === "mouse") return;
+
+            isDragging = true;
+            dragPointerId = e.pointerId;
+            card.setPointerCapture(e.pointerId);
+
+            card.classList.add("is-interacting", "is-dragging");
+            document.body.style.userSelect = "none";
+            document.body.style.webkitUserSelect = "none";
+
+            updateAnchor();
+
+            dragStartPointerX = e.clientX;
+            dragStartPointerY = e.clientY;
+            dragStartCardX = x;
+            dragStartCardY = y;
+
+            lastPointerX = e.clientX;
+            lastPointerY = e.clientY;
+            lastPointerTime = performance.now();
+            pointerVx = 0;
+            pointerVy = 0;
+            vx = 0;
+            vy = 0;
+
+            wakeLoop();
         });
 
-        heroVisual.addEventListener('mouseleave', () => {
-            profileContainer.style.transform = `rotateX(5deg) rotateY(-5deg)`;
-            profileContainer.style.transition = 'transform 0.5s ease-out';
+        window.addEventListener("pointermove", (e) => {
+            if (!isDragging || e.pointerId !== dragPointerId) return;
+
+            const now = performance.now();
+            const dt = (now - lastPointerTime) / 1000;
+
+            const deltaX = e.clientX - dragStartPointerX;
+            const deltaY = e.clientY - dragStartPointerY;
+
+            let newX = dragStartCardX + deltaX;
+            let newY = dragStartCardY + deltaY;
+
+            // Clamping during drag
+            const minY = anchorY + 30;
+            const maxY = anchorY + restLength * 2.2;
+            const maxRangeX = Math.max(window.innerWidth * 0.45, 260);
+
+            newY = Math.max(minY, Math.min(maxY, newY));
+            newX = Math.max(anchorX - maxRangeX, Math.min(anchorX + maxRangeX, newX));
+
+            x = newX;
+            y = newY;
+
+            if (dt > 0.005) {
+                const instVx = (e.clientX - lastPointerX) / dt;
+                const instVy = (e.clientY - lastPointerY) / dt;
+                pointerVx = pointerVx * 0.35 + instVx * 0.65;
+                pointerVy = pointerVy * 0.35 + instVy * 0.65;
+                lastPointerX = e.clientX;
+                lastPointerY = e.clientY;
+                lastPointerTime = now;
+            }
+
+            wakeLoop();
         });
+
+        function endDrag(e) {
+            if (!isDragging) return;
+            if (e && dragPointerId !== null && e.pointerId !== dragPointerId) return;
+
+            isDragging = false;
+            if (dragPointerId !== null) {
+                try { card.releasePointerCapture(dragPointerId); } catch (_) {}
+                dragPointerId = null;
+            }
+
+            card.classList.remove("is-interacting", "is-dragging");
+            document.body.style.userSelect = "";
+            document.body.style.webkitUserSelect = "";
+
+            // Seed release velocity with safety clamp
+            const maxRelease = 1500;
+            vx = Math.max(-maxRelease, Math.min(maxRelease, pointerVx));
+            vy = Math.max(-maxRelease, Math.min(maxRelease, pointerVy));
+
+            wakeLoop();
+        }
+
+        window.addEventListener("pointerup", endDrag);
+        window.addEventListener("pointercancel", endDrag);
+
+        // Subtle 3D hover micro-tilt on mouse move over the card
+        card.addEventListener("pointerenter", () => {
+            if (!isDragging) hoverTiltActive = true;
+        });
+
+        card.addEventListener("pointermove", (e) => {
+            if (isDragging) return;
+            hoverTiltActive = true;
+            const rect = card.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const rx = (e.clientY - cy) / (rect.height / 2);
+            const ry = (e.clientX - cx) / (rect.width / 2);
+            hoverTiltX = -rx * 9;
+            hoverTiltY = ry * 9;
+            if (!isRunning) {
+                render();
+            }
+        });
+
+        card.addEventListener("pointerleave", () => {
+            hoverTiltActive = false;
+            hoverTiltX = 0;
+            hoverTiltY = 0;
+            if (!isRunning) {
+                render();
+            }
+        });
+
+        // Resize & orientation handler to update geometry smoothly without jumps
+        function handleResize() {
+            const oldAnchorX = anchorX;
+            const oldAnchorY = anchorY;
+            updateAnchor();
+
+            if (!isDragging) {
+                if (!isRunning) {
+                    x = anchorX;
+                    y = anchorY + restLength;
+                    angle = 0;
+                    angleVelocity = 0;
+                    vx = 0;
+                    vy = 0;
+                    render();
+                } else {
+                    // Maintain relative offset to prevent glitches during active physics
+                    x += (anchorX - oldAnchorX);
+                    y += (anchorY - oldAnchorY);
+                    render();
+                }
+            }
+        }
+
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("orientationchange", () => {
+            setTimeout(handleResize, 100);
+            setTimeout(handleResize, 350);
+        });
+
+        // Trigger initial drop animation or set resting state
+        function startDropAnimation() {
+            updateAnchor();
+            if (prefersReducedMotion) {
+                x = anchorX;
+                y = anchorY + restLength;
+                vx = 0;
+                vy = 0;
+                angle = 0;
+                render();
+                return;
+            }
+
+            // Start card above visible viewport with an angular impulse
+            x = anchorX + 60;
+            y = -260;
+            vx = -40;
+            vy = 120;
+            angle = 0.25;
+            angleVelocity = 0;
+            render();
+            wakeLoop();
+        }
+
+        // Coordinate with loading screen for maximum visual impact
+        const loader = document.getElementById("loader");
+        if (loader && !loader.classList.contains("hidden")) {
+            // Drop right as loader fades out
+            setTimeout(startDropAnimation, 650);
+        } else {
+            // Fallback drop
+            setTimeout(startDropAnimation, 100);
+        }
     }
+
+    initHangingCard();
+
 
     // --- CONTACT FORM AJAX SUBMISSION ---
     const contactForm = document.getElementById("contactForm");
