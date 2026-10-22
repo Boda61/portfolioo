@@ -373,6 +373,7 @@ a {
     padding: 0.65rem 0;
 }
 
+
 .nav-container {
     max-width: 1320px;
     margin: 0 auto;
@@ -1627,24 +1628,31 @@ a {
         padding: 2rem;
     }
 
-    /* Mobile & iPad Header */
+    /* Mobile & iPad Header — keep announcement hidden to save vertical space */
+    .top-announcement {
+        display: none !important;
+    }
+
+    /* Keep top announcement hidden on mobile/tablet */
     .top-announcement {
         display: none !important;
     }
 
     .navbar {
-        padding: 0.85rem 0;
-        background: rgba(4, 8, 16, 0.88);
+        padding: 0.75rem 0 0.5rem;
+        background: rgba(4, 8, 16, 0.94);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        transition: padding 0.3s ease, background 0.3s ease;
     }
 
     .nav-container {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        padding: 0 1.5rem;
+        padding: 0 1.25rem;
         width: 100%;
         max-width: 100%;
     }
@@ -1687,69 +1695,174 @@ a {
         transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
-    /* Mobile & iPad Drawer Navigation */
+    /* --- MOBILE & IPAD TIMELINE STEPPER (EXACT LAPTOP DESIGN) --- */
     .nav-stepper-wrap {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 280px;
-        max-width: 80vw;
-        height: 100vh;
-        height: 100dvh;
-        background: rgba(5, 10, 20, 0.97);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: relative;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 3rem 2rem;
-        transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        z-index: 1001;
-        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
+        align-items: center;
+        transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.25s ease,
+                    margin 0.3s ease,
+                    padding 0.3s ease;
     }
 
+    /* Revealed upon scrolling or clicking hamburger */
+    .site-header.scrolled .nav-stepper-wrap,
     .nav-stepper-wrap.active {
+        max-height: 52px;
+        opacity: 1;
+        pointer-events: auto;
+        margin: 0.75rem auto 0.2rem;
+        padding: 0 0.5rem 0.5rem;
+        overflow: visible;
+    }
+
+    .nav-stepper-wrap .stepper-rail-line {
+        display: block !important;
+        position: absolute;
+        left: 0;
         right: 0;
+        bottom: -4px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+        z-index: 1;
+    }
+
+    .nav-stepper-wrap .stepper-rail-progress {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        height: 2px;
+        width: 0;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        box-shadow: 0 0 10px var(--secondary-glow);
+        z-index: 2;
+        pointer-events: none;
+        transition: width 0.05s ease-out;
+    }
+
+    .nav-stepper-wrap .stepper-indicator {
+        display: flex !important;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 32px;
+        height: 14px;
+        margin-left: -16px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        pointer-events: none;
+        z-index: 5;
+        transition: transform 0.05s ease-out;
+        transform: translateX(0);
+    }
+
+    .nav-stepper-wrap .indicator-glow {
+        display: block !important;
+        position: absolute;
+        bottom: 5px;
+        width: 24px;
+        height: 2.5px;
+        background: linear-gradient(90deg, var(--secondary), #ffffff);
+        box-shadow: 0 0 12px var(--secondary-glow), 0 0 4px #ffffff;
+        border-radius: 2px;
+    }
+
+    .nav-stepper-wrap .indicator-tick {
+        display: block !important;
+        position: absolute;
+        bottom: 0;
+        width: 2px;
+        height: 10px;
+        background: #ffffff;
+        box-shadow: 0 0 8px var(--secondary-glow), 0 0 4px #ffffff;
+        border-radius: 1px;
     }
 
     .nav-stepper-wrap .nav-steps {
-        display: flex;
-        flex-direction: column;
-        gap: 1.8rem;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
+        display: flex !important;
+        flex-direction: row !important;
+        width: 100% !important;
+        justify-content: space-between !important;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        position: relative;
+        z-index: 3;
     }
 
     .nav-stepper-wrap .nav-step {
-        padding: 0;
-        width: 100%;
+        position: relative !important;
+        padding-bottom: 10px !important;
+        width: auto !important;
+        cursor: pointer;
     }
 
     .nav-stepper-wrap .nav-step a {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        font-size: 1.15rem;
-        color: rgba(255, 255, 255, 0.7);
-        font-family: var(--font-mono);
-        text-decoration: none;
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 0.25rem !important;
+        text-decoration: none !important;
+        font-family: var(--font-mono) !important;
         transition: color 0.2s ease, transform 0.2s ease;
     }
 
-    .nav-stepper-wrap .nav-step.active a,
-    .nav-stepper-wrap .nav-step:hover a {
-        color: #00ffcc;
-        transform: translateX(4px);
+    .nav-stepper-wrap .nav-step .step-num {
+        font-size: 0.68rem !important;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        transition: color 0.2s ease, text-shadow 0.2s ease;
     }
 
-    .nav-stepper-wrap .stepper-rail-line,
-    .nav-stepper-wrap .stepper-rail-progress,
-    .nav-stepper-wrap .stepper-indicator,
+    .nav-stepper-wrap .nav-step .step-label {
+        font-size: 0.78rem !important;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        transition: color 0.2s ease;
+    }
+
     .nav-stepper-wrap .step-tick {
-        display: none !important;
+        display: block !important;
+        position: absolute !important;
+        bottom: -7px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 1px !important;
+        height: 5px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        transition: background 0.2s ease, height 0.2s ease;
+        z-index: 2;
+    }
+
+    .nav-stepper-wrap .nav-step:hover .step-num,
+    .nav-stepper-wrap .nav-step.active .step-num {
+        color: var(--secondary) !important;
+        text-shadow: 0 0 8px var(--secondary-glow);
+    }
+
+    .nav-stepper-wrap .nav-step:hover .step-label,
+    .nav-stepper-wrap .nav-step.active .step-label {
+        color: var(--text-main) !important;
+    }
+
+    .nav-stepper-wrap .nav-step:hover .step-tick,
+    .nav-stepper-wrap .nav-step.active .step-tick {
+        background: var(--secondary) !important;
+        box-shadow: 0 0 6px var(--secondary-glow);
+        height: 7px !important;
     }
 
     /* iPad & Mobile Hero Layout: Zero Overlap */

@@ -58,12 +58,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- SITE HEADER & ANNOUNCEMENT SCROLL EFFECT ---
     const siteHeader = document.querySelector(".site-header");
+    let wasScrolled = false;
     function handleHeaderScroll() {
         if (!siteHeader) return;
-        if (window.scrollY > 35) {
+        const isScrolled = window.scrollY > 35;
+        if (isScrolled) {
             siteHeader.classList.add("scrolled");
+            if (!wasScrolled) {
+                wasScrolled = true;
+                setTimeout(updateStepCoordinates, 50);
+                setTimeout(updateStepCoordinates, 200);
+            }
         } else {
             siteHeader.classList.remove("scrolled");
+            wasScrolled = false;
         }
     }
     window.addEventListener("scroll", handleHeaderScroll, { passive: true });
@@ -76,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hamburger && navStepperWrap) {
         hamburger.addEventListener("click", () => {
             navStepperWrap.classList.toggle("active");
+            setTimeout(updateStepCoordinates, 50);
+            setTimeout(updateStepCoordinates, 200);
             const spans = hamburger.querySelectorAll("span");
             if (navStepperWrap.classList.contains("active")) {
                 spans[0].style.transform = "rotate(45deg) translate(5px, 5px)";
@@ -117,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateStepCoordinates() {
         if (!navStepperWrap) return;
         const wrapRect = navStepperWrap.getBoundingClientRect();
+        if (wrapRect.width <= 0) return;
         stepCenters = Array.from(navStepItems).map(item => {
             const itemRect = item.getBoundingClientRect();
             return (itemRect.left + itemRect.width / 2) - wrapRect.left;
@@ -127,8 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let isTicking = false;
 
     function updateStepperIndicator() {
-        if (!navStepperWrap || stepCenters.length < 2) return;
-
         const scrollY = window.scrollY;
         const headerOffset = siteHeader ? siteHeader.offsetHeight + 10 : 90;
         const currentScroll = scrollY + headerOffset;
@@ -136,12 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Check if user reached near the bottom of the page
         const isBottom = (window.innerHeight + scrollY) >= (document.documentElement.scrollHeight - 60);
 
-        let targetX = stepCenters[0];
         let activeIndex = 0;
 
         if (isBottom) {
-            activeIndex = stepCenters.length - 1;
-            targetX = stepCenters[activeIndex];
+            activeIndex = sectionElements.length - 1;
         } else {
             for (let i = 0; i < sectionElements.length; i++) {
                 const sec = sectionElements[i];
@@ -152,29 +159,57 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (currentScroll >= secTop && currentScroll < secNextTop) {
                     const secRange = secNextTop - secTop;
                     const progress = secRange > 0 ? (currentScroll - secTop) / secRange : 0;
-                    const clampedProgress = Math.min(Math.max(progress, 0), 1);
-
-                    const startX = stepCenters[i];
-                    const endX = (i + 1 < stepCenters.length) ? stepCenters[i + 1] : startX;
-
-                    targetX = startX + (endX - startX) * clampedProgress;
-                    activeIndex = clampedProgress >= 0.5 && (i + 1 < stepCenters.length) ? i + 1 : i;
+                    activeIndex = progress >= 0.5 && (i + 1 < sectionElements.length) ? i + 1 : i;
                     break;
                 } else if (currentScroll < sectionElements[0].offsetTop) {
-                    targetX = stepCenters[0];
                     activeIndex = 0;
                     break;
                 }
             }
         }
 
-        if (stepperIndicator) {
-            stepperIndicator.style.transform = `translateX(${targetX}px)`;
-        }
-        if (stepperRailProgress) {
-            stepperRailProgress.style.width = `${targetX}px`;
+        // Lazy-init step coordinates if not computed yet
+        if (stepCenters.length < 2 && navStepperWrap && navStepperWrap.getBoundingClientRect().width > 0) {
+            const wrapRect = navStepperWrap.getBoundingClientRect();
+            stepCenters = Array.from(navStepItems).map(item => {
+                const itemRect = item.getBoundingClientRect();
+                return (itemRect.left + itemRect.width / 2) - wrapRect.left;
+            });
         }
 
+        // 1. Continuous rail & glowing indicator (exact laptop math)
+        if (navStepperWrap && stepCenters.length >= 2) {
+            let targetX = stepCenters[0];
+            if (isBottom) {
+                targetX = stepCenters[stepCenters.length - 1];
+            } else {
+                for (let i = 0; i < sectionElements.length; i++) {
+                    const sec = sectionElements[i];
+                    const secTop = sec.offsetTop;
+                    const nextSec = sectionElements[i + 1];
+                    const secNextTop = nextSec ? nextSec.offsetTop : (secTop + sec.offsetHeight);
+
+                    if (currentScroll >= secTop && currentScroll < secNextTop) {
+                        const secRange = secNextTop - secTop;
+                        const progress = secRange > 0 ? (currentScroll - secTop) / secRange : 0;
+                        const clampedProgress = Math.min(Math.max(progress, 0), 1);
+                        const startX = stepCenters[i];
+                        const endX = (i + 1 < stepCenters.length) ? stepCenters[i + 1] : startX;
+                        targetX = startX + (endX - startX) * clampedProgress;
+                        break;
+                    }
+                }
+            }
+
+            if (stepperIndicator) {
+                stepperIndicator.style.transform = `translateX(${targetX}px)`;
+            }
+            if (stepperRailProgress) {
+                stepperRailProgress.style.width = `${targetX}px`;
+            }
+        }
+
+        // 2. Nav items active state
         navStepItems.forEach((item, idx) => {
             if (idx === activeIndex) {
                 item.classList.add("active");
