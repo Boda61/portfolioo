@@ -18,7 +18,37 @@
   </head>
 
   <body>
-    <!-- Loading Screen -->
+    <!-- Cinematic Welcome Intro Overlay (Superhero Opening) -->
+    <div id="cinematicIntro" class="cinematic-intro" aria-label="Welcome Intro">
+      <canvas id="introEnergyCanvas" class="intro-canvas"></canvas>
+      <div class="intro-vignette"></div>
+      <div class="intro-center-glow"></div>
+
+      <div class="intro-stage">
+        <div class="intro-subtitle-wrap">
+          <span class="intro-subtitle">WELCOME TO MY</span>
+        </div>
+        <div class="intro-title-wrap">
+          <h1 class="intro-title">
+            <span class="intro-title-text" data-text="PORTFOLIO">PORTFOLIO</span>
+            <span class="intro-light-sweep"></span>
+          </h1>
+        </div>
+        <div class="intro-energy-ring"></div>
+      </div>
+
+      <div class="intro-flash" id="introFlash"></div>
+
+      <button id="skipIntroBtn" class="skip-intro-btn" type="button" aria-label="Skip Intro">
+        <span>Skip Intro</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 4 15 12 5 20 5 4"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Loading Screen (Bypassed when Cinematic Intro plays) -->
     <div id="loader" class="loader-wrapper">
       <div class="loader-content">
         <div class="glow-orb"></div>

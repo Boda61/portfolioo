@@ -44,17 +44,284 @@ document.addEventListener("DOMContentLoaded", () => {
 
     typeEffect();
 
-    // --- LOADING SCREEN ---
-    const loader = document.getElementById("loader");
+    // ==========================================================================
+    // CINEMATIC WELCOME INTRO OVERLAY (SUPERHERO OPENING)
+    // ==========================================================================
 
-    // Simulate loading time for effect, or wait for window load
-    window.addEventListener("load", () => {
-        setTimeout(() => {
-            loader.classList.add("hidden");
-            // Optional: completely remove from DOM after transition
-            setTimeout(() => loader.remove(), 800);
-        }, 500); // Small artificial delay for the 'initializing' feel
-    });
+    function isSessionStorageAvailable() {
+        try {
+            const key = "__test_session__";
+            sessionStorage.setItem(key, key);
+            sessionStorage.removeItem(key);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function hasSeenIntro() {
+        if (!isSessionStorageAvailable()) return false;
+        try {
+            return sessionStorage.getItem("portfolio_intro_seen") === "true";
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function markIntroSeen() {
+        if (!isSessionStorageAvailable()) return;
+        try {
+            sessionStorage.setItem("portfolio_intro_seen", "true");
+        } catch (e) {
+            // Silently handle private browsing quota/security errors
+        }
+    }
+
+    function initCinematicIntro() {
+        const intro = document.getElementById("cinematicIntro");
+        const canvas = document.getElementById("introEnergyCanvas");
+        const skipBtn = document.getElementById("skipIntroBtn");
+        const loader = document.getElementById("loader");
+
+        function triggerCardDropSafe() {
+            if (typeof window.__executeCardDrop === "function") {
+                window.__executeCardDrop();
+            } else {
+                window.__portfolioIntroCompleted = true;
+            }
+        }
+
+        let forceReplay = false;
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            forceReplay = urlParams.has("replay") || urlParams.has("intro");
+            if (forceReplay) {
+                sessionStorage.removeItem("portfolio_intro_seen");
+            }
+        } catch (e) {}
+
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const alreadySeen = hasSeenIntro() && !forceReplay;
+
+        console.log("[Cinematic Intro]", { alreadySeen, prefersReducedMotion, forceReplay });
+
+        // Bypass intro if already seen in this tab session or prefers reduced motion (unless forceReplay)
+        if (!intro || (alreadySeen && !forceReplay) || (prefersReducedMotion && !forceReplay)) {
+            if (intro) {
+                intro.style.display = "none";
+                intro.remove();
+            }
+            if (loader) {
+                loader.classList.add("hidden");
+                setTimeout(() => { if (loader && loader.parentNode) loader.remove(); }, 300);
+            }
+            document.body.style.overflow = "";
+            window.__portfolioIntroCompleted = true;
+            triggerCardDropSafe();
+            return;
+        }
+
+        // Active intro session: lock body scroll and remove default loader
+        document.body.style.overflow = "hidden";
+        if (loader) {
+            loader.style.display = "none";
+            loader.remove();
+        }
+
+        let isCompleted = false;
+        let timeouts = [];
+        let rafId = null;
+
+        function safeTimeout(fn, delay) {
+            const t = setTimeout(fn, delay);
+            timeouts.push(t);
+            return t;
+        }
+
+        function finishIntro(instant = false) {
+            if (isCompleted) return;
+            isCompleted = true;
+            window.__portfolioIntroCompleted = true;
+
+            // Clear all pending timeouts
+            timeouts.forEach(t => clearTimeout(t));
+            timeouts = [];
+
+            // Stop canvas loop immediately
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+
+            // Mark session as seen
+            markIntroSeen();
+
+            // Restore scrolling
+            document.body.style.overflow = "";
+
+            // Trigger card falling physics right as the portfolio is revealed
+            triggerCardDropSafe();
+
+            // Transition out overlay
+            if (intro) {
+                intro.classList.remove("flash-active");
+                if (instant) {
+                    intro.classList.add("fade-out-fast");
+                    setTimeout(() => {
+                        if (intro.parentNode) intro.remove();
+                    }, 260);
+                } else {
+                    intro.classList.add("fade-out");
+                    setTimeout(() => {
+                        if (intro.parentNode) intro.remove();
+                    }, 700);
+                }
+            }
+        }
+
+        // Skip Button Click & Escape Key
+        if (skipBtn) {
+            skipBtn.addEventListener("click", () => finishIntro(true));
+        }
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !isCompleted) {
+                finishIntro(true);
+            }
+        }, { once: true });
+
+        // Safety Fallback: Never leave user stranded if anything stalls
+        safeTimeout(() => {
+            if (!isCompleted) finishIntro(false);
+        }, 5500);
+
+        // --- ELECTRIC BLUE PARTICLES CANVAS SYSTEM ---
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+            let width = (canvas.width = window.innerWidth);
+            let height = (canvas.height = window.innerHeight);
+
+            // Responsive particle count (lightweight on mobile)
+            const isMobile = window.innerWidth <= 768;
+            const particleCount = isMobile ? 36 : 75;
+            const particles = [];
+            let centralPull = 0.0003;
+
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * Math.max(width, height) * 0.7 + 60;
+                particles.push({
+                    x: width / 2 + Math.cos(angle) * dist,
+                    y: height / 2 + Math.sin(angle) * dist,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    size: Math.random() * 2 + 1,
+                    alpha: Math.random() * 0.7 + 0.3,
+                    color: Math.random() > 0.4 ? "0, 240, 255" : (Math.random() > 0.5 ? "0, 162, 255" : "255, 255, 255")
+                });
+            }
+
+            function resizeCanvas() {
+                if (isCompleted || !canvas) return;
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener("resize", resizeCanvas, { passive: true });
+
+            function renderParticles() {
+                if (isCompleted) return;
+
+                ctx.fillStyle = "rgba(2, 2, 4, 0.28)";
+                ctx.fillRect(0, 0, width, height);
+
+                const cx = width / 2;
+                const cy = height / 2;
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+
+                    // Gentle gravity toward center
+                    const dx = cx - p.x;
+                    const dy = cy - p.y;
+                    p.vx += dx * centralPull;
+                    p.vy += dy * centralPull;
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Damping
+                    p.vx *= 0.985;
+                    p.vy *= 0.985;
+
+                    // Draw glowing particle
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+                    ctx.shadowColor = `rgba(${p.color}, 0.8)`;
+                    ctx.shadowBlur = p.size * 4;
+                    ctx.fill();
+                    ctx.restore();
+
+                    // If particle passes very close to center, recirculate outward
+                    const dCenter = Math.hypot(dx, dy);
+                    if (dCenter < 30) {
+                        const newAngle = Math.random() * Math.PI * 2;
+                        const newDist = Math.max(width, height) * 0.65;
+                        p.x = cx + Math.cos(newAngle) * newDist;
+                        p.y = cy + Math.sin(newAngle) * newDist;
+                        p.vx = (Math.random() - 0.5) * 2;
+                        p.vy = (Math.random() - 0.5) * 2;
+                    }
+                }
+
+                rafId = requestAnimationFrame(renderParticles);
+            }
+
+            renderParticles();
+        }
+
+        // --- CHOREOGRAPHED TIMELINE (Total ~4.0s) ---
+        // 0.3s: Reveal Skip Button
+        safeTimeout(() => {
+            if (intro) intro.classList.add("show-skip");
+        }, 300);
+
+        // 0.8s: Reveal "WELCOME TO MY"
+        safeTimeout(() => {
+            if (intro) intro.classList.add("show-subtitle");
+        }, 800);
+
+        // 1.7s: Reveal "PORTFOLIO" with specular flare
+        safeTimeout(() => {
+            if (intro) intro.classList.add("show-title");
+        }, 1700);
+
+        // 2.1s: Specular Light Sweep flare passes across "PORTFOLIO"
+        safeTimeout(() => {
+            if (intro) intro.classList.add("sweep-light");
+        }, 2100);
+
+        // 2.9s: Converge energy ring & intensify central pull
+        safeTimeout(() => {
+            if (intro) {
+                intro.classList.add("show-energy");
+                intro.classList.add("stage-climax");
+            }
+        }, 2900);
+
+        // 3.65s: Controlled Cinematic Flash blooms
+        safeTimeout(() => {
+            if (intro) intro.classList.add("flash-active");
+        }, 3650);
+
+        // 3.95s: Transition out, trigger card physics drop, restore scrolling
+        safeTimeout(() => {
+            finishIntro(false);
+        }, 3950);
+    }
+
+    initCinematicIntro();
 
     // --- SITE HEADER & ANNOUNCEMENT SCROLL EFFECT ---
     const siteHeader = document.querySelector(".site-header");
@@ -767,14 +1034,22 @@ document.addEventListener("DOMContentLoaded", () => {
             wakeLoop();
         }
 
-        // Coordinate with loading screen for maximum visual impact
-        const loader = document.getElementById("loader");
-        if (loader && !loader.classList.contains("hidden")) {
-            // Drop right as loader fades out
-            setTimeout(startDropAnimation, 650);
+        // Card Drop Coordinator: ensures physics drop happens exactly once
+        let cardHasDropped = false;
+        function executeCardDrop() {
+            if (cardHasDropped) return;
+            cardHasDropped = true;
+            startDropAnimation();
+        }
+
+        window.__executeCardDrop = executeCardDrop;
+
+        // If intro was already marked completed or bypassed, drop immediately
+        if (window.__portfolioIntroCompleted) {
+            setTimeout(executeCardDrop, 50);
         } else {
-            // Fallback drop
-            setTimeout(startDropAnimation, 100);
+            // Safety fallback: drop after 5.5s maximum if not triggered by intro
+            setTimeout(executeCardDrop, 5500);
         }
     }
 
