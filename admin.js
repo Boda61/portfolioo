@@ -646,6 +646,12 @@ document.addEventListener("DOMContentLoaded", () => {
             lastName: "Mohamed",
             typingJobs: "Frontend Developer, UI Designer, Web Developer, Freelancer",
             profileImage: "generation-f0f658ee-6474-489f-b072-ed21158cec54.png",
+            cardName: "ABDULLAH MOHAMED",
+            cardRole: "FRONT-END DEVELOPER",
+            cardTagLabel: "PORTFOLIO // 2026",
+            cardTagStatus: "AVAILABLE",
+            cardMeta: "UI ARCHITECTURE • CREATIVE DEV",
+            cardLanyard: "ABDULLAH • DEVELOPER • 3D CARD",
             ctaPrimary: "View Projects",
             ctaSecondary: "Let's Talk"
         },
@@ -706,6 +712,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("hero-last-name").value = h.lastName || "";
         document.getElementById("hero-typing-jobs").value = h.typingJobs || "";
         document.getElementById("hero-profile-image").value = h.profileImage || "";
+        if (document.getElementById("hero-card-name")) document.getElementById("hero-card-name").value = h.cardName || "";
+        if (document.getElementById("hero-card-role")) document.getElementById("hero-card-role").value = h.cardRole || "";
+        if (document.getElementById("hero-card-tag-label")) document.getElementById("hero-card-tag-label").value = h.cardTagLabel || "";
+        if (document.getElementById("hero-card-tag-status")) document.getElementById("hero-card-tag-status").value = h.cardTagStatus || "";
+        if (document.getElementById("hero-card-meta")) document.getElementById("hero-card-meta").value = h.cardMeta || "";
+        if (document.getElementById("hero-card-lanyard")) document.getElementById("hero-card-lanyard").value = h.cardLanyard || "";
         document.getElementById("hero-cta-primary").value = h.ctaPrimary || "";
         document.getElementById("hero-cta-secondary").value = h.ctaSecondary || "";
 
@@ -884,6 +896,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 lastName: document.getElementById("hero-last-name").value.trim(),
                 typingJobs: document.getElementById("hero-typing-jobs").value.trim(),
                 profileImage: document.getElementById("hero-profile-image").value.trim(),
+                cardName: document.getElementById("hero-card-name") ? document.getElementById("hero-card-name").value.trim() : "",
+                cardRole: document.getElementById("hero-card-role") ? document.getElementById("hero-card-role").value.trim() : "",
+                cardTagLabel: document.getElementById("hero-card-tag-label") ? document.getElementById("hero-card-tag-label").value.trim() : "",
+                cardTagStatus: document.getElementById("hero-card-tag-status") ? document.getElementById("hero-card-tag-status").value.trim() : "",
+                cardMeta: document.getElementById("hero-card-meta") ? document.getElementById("hero-card-meta").value.trim() : "",
+                cardLanyard: document.getElementById("hero-card-lanyard") ? document.getElementById("hero-card-lanyard").value.trim() : "",
                 ctaPrimary: document.getElementById("hero-cta-primary").value.trim(),
                 ctaSecondary: document.getElementById("hero-cta-secondary").value.trim()
             };

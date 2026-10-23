@@ -14,6 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.css" />
     <link rel="stylesheet" href="style.css?v=3.1" />
   </head>
 
@@ -30,7 +31,9 @@
         </div>
         <div class="intro-title-wrap">
           <h1 class="intro-title">
-            <span class="intro-title-text" data-text="PORTFOLIO">PORTFOLIO</span>
+            <span class="intro-title-text" data-text="PORTFOLIO"
+              >PORTFOLIO</span
+            >
             <span class="intro-light-sweep"></span>
           </h1>
         </div>
@@ -39,9 +42,23 @@
 
       <div class="intro-flash" id="introFlash"></div>
 
-      <button id="skipIntroBtn" class="skip-intro-btn" type="button" aria-label="Skip Intro">
+      <button
+        id="skipIntroBtn"
+        class="skip-intro-btn"
+        type="button"
+        aria-label="Skip Intro"
+      >
         <span>Skip Intro</span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <polygon points="5 4 15 12 5 20 5 4"></polygon>
           <line x1="19" y1="5" x2="19" y2="19"></line>
         </svg>
@@ -65,7 +82,10 @@
       <div class="top-announcement" id="top-announcement">
         <div class="announcement-content">
           <span class="announcement-badge">AVAILABLE</span>
-          <span class="announcement-text">Open for freelance projects & full-time senior engineering roles</span>
+          <span class="announcement-text"
+            >Open for freelance projects & full-time senior engineering
+            roles</span
+          >
           <a href="#contact" class="announcement-link">Get in touch &rarr;</a>
         </div>
       </div>
@@ -76,7 +96,16 @@
           <!-- Brand / Logo -->
           <a href="#hero" class="brand-logo">
             <div class="brand-mark">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
                 <polyline points="2 17 12 22 22 17"></polyline>
                 <polyline points="2 12 12 17 22 12"></polyline>
@@ -209,18 +238,48 @@
           <!-- Dynamic SVG Fabric Lanyard -->
           <svg class="hanging-cord-svg" id="hangingCordSvg" aria-hidden="true">
             <defs>
-              <filter id="lanyardShadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.65" />
+              <filter
+                id="lanyardShadow"
+                x="-30%"
+                y="-30%"
+                width="160%"
+                height="160%"
+              >
+                <feDropShadow
+                  dx="0"
+                  dy="3"
+                  stdDeviation="3.5"
+                  flood-color="#000000"
+                  flood-opacity="0.65"
+                />
               </filter>
             </defs>
             <!-- Black Woven Fabric Strap -->
-            <path id="lanyardPath" d="M 0 0 L 0 0" class="lanyard-strap" filter="url(#lanyardShadow)" />
+            <path
+              id="lanyardPath"
+              d="M 0 0 L 0 0"
+              class="lanyard-strap"
+              filter="url(#lanyardShadow)"
+            />
             <!-- Edge Stitches for realistic fabric texture -->
-            <path id="lanyardStitchLeft" d="M 0 0 L 0 0" class="lanyard-stitch" />
-            <path id="lanyardStitchRight" d="M 0 0 L 0 0" class="lanyard-stitch" />
+            <path
+              id="lanyardStitchLeft"
+              d="M 0 0 L 0 0"
+              class="lanyard-stitch"
+            />
+            <path
+              id="lanyardStitchRight"
+              d="M 0 0 L 0 0"
+              class="lanyard-stitch"
+            />
             <!-- Printed Typography along the Lanyard Strap -->
             <text class="lanyard-text" dy="3">
-              <textPath id="lanyardTextPath" href="#lanyardPath" startOffset="50%" text-anchor="middle">
+              <textPath
+                id="lanyardTextPath"
+                href="#lanyardPath"
+                startOffset="50%"
+                text-anchor="middle"
+              >
                 ABDULLAH &bull; DEVELOPER &bull; 3D CARD
               </textPath>
             </text>
@@ -271,7 +330,9 @@
                   <h3 class="card-name">ABDULLAH MOHAMED</h3>
                   <p class="card-role">FRONT-END DEVELOPER</p>
                   <div class="card-meta-row" aria-hidden="true">
-                    <span class="card-meta-code">UI ARCHITECTURE &bull; CREATIVE DEV</span>
+                    <span class="card-meta-code"
+                      >UI ARCHITECTURE &bull; CREATIVE DEV</span
+                    >
                   </div>
                 </div>
               </div>
@@ -704,6 +765,8 @@
     <!-- Supabase SDK & Config -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

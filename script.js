@@ -1,4 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // ==========================================
+    // LENIS SMOOTH SCROLL INITIALIZATION
+    // ==========================================
+    let lenis = null;
+    try {
+        if (typeof Lenis !== "undefined") {
+            lenis = new Lenis({
+                duration: 1.15,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                orientation: "vertical",
+                gestureOrientation: "vertical",
+                smoothWheel: true,
+                wheelMultiplier: 1,
+                touchMultiplier: 1.3,
+                infinite: false
+            });
+
+            function lenisRaf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(lenisRaf);
+            }
+            requestAnimationFrame(lenisRaf);
+
+            window.lenis = lenis;
+        }
+    } catch (e) {
+        console.warn("[Lenis] Initialization notice:", e);
+    }
+
     // ======================
     // TYPING EFFECT FOR JOBS
     // ======================
@@ -116,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 setTimeout(() => { if (loader && loader.parentNode) loader.remove(); }, 300);
             }
             document.body.style.overflow = "";
+            if (window.lenis) window.lenis.start();
             window.__portfolioIntroCompleted = true;
             triggerCardDropSafe();
             return;
@@ -123,6 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Active intro session: lock body scroll and remove default loader
         document.body.style.overflow = "hidden";
+        if (window.lenis) window.lenis.stop();
         if (loader) {
             loader.style.display = "none";
             loader.remove();
@@ -158,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Restore scrolling
             document.body.style.overflow = "";
+            if (window.lenis) window.lenis.start();
 
             // Trigger card falling physics right as the portfolio is revealed
             triggerCardDropSafe();
@@ -497,8 +529,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener("scroll", onScrollStepper, { passive: true });
+    if (lenis) {
+        lenis.on("scroll", onScrollStepper);
+    }
     window.addEventListener("resize", updateStepCoordinates);
     window.addEventListener("orientationchange", () => setTimeout(updateStepCoordinates, 150));
+
+    // Smooth Anchor Navigation using Lenis (with header offset)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            const targetId = this.getAttribute("href");
+            if (targetId && targetId !== "#" && targetId.length > 1) {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    if (window.lenis) {
+                        const headerOffset = siteHeader ? siteHeader.offsetHeight + 10 : 80;
+                        window.lenis.scrollTo(targetElement, {
+                            offset: -headerOffset,
+                            duration: 1.2
+                        });
+                    } else {
+                        targetElement.scrollIntoView({ behavior: "smooth" });
+                    }
+                }
+            }
+        });
+    });
 
     // Initial calculation after fonts and layout render
     setTimeout(updateStepCoordinates, 150);
@@ -1253,6 +1310,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (h.profileImage) {
                     const profileImg = document.getElementById("profile3d");
                     if (profileImg) profileImg.src = h.profileImage;
+                }
+
+                // Dynamic 3D Card & Lanyard Typography
+                if (h.cardName) {
+                    const cardNameEl = document.querySelector(".hanging-card .card-name");
+                    if (cardNameEl) cardNameEl.textContent = h.cardName;
+                }
+
+                if (h.cardRole) {
+                    const cardRoleEl = document.querySelector(".hanging-card .card-role");
+                    if (cardRoleEl) cardRoleEl.textContent = h.cardRole;
+                }
+
+                if (h.cardTagLabel) {
+                    const tagLabelEl = document.querySelector(".hanging-card .tag-label");
+                    if (tagLabelEl) tagLabelEl.textContent = h.cardTagLabel;
+                }
+
+                if (h.cardTagStatus) {
+                    const tagStatusEl = document.querySelector(".hanging-card .tag-status");
+                    if (tagStatusEl) tagStatusEl.textContent = h.cardTagStatus;
+                }
+
+                if (h.cardMeta) {
+                    const cardMetaEl = document.querySelector(".hanging-card .card-meta-code");
+                    if (cardMetaEl) {
+                        cardMetaEl.innerHTML = escapeHtml(h.cardMeta).replace(/&amp;bull;/g, "&bull;");
+                    }
+                }
+
+                if (h.cardLanyard) {
+                    const lanyardTextPathEl = document.getElementById("lanyardTextPath");
+                    if (lanyardTextPathEl) {
+                        lanyardTextPathEl.textContent = h.cardLanyard.replace(/&bull;/g, "•");
+                    }
                 }
 
                 const ctaPrimary = document.querySelector(".hero-cta .btn-primary");

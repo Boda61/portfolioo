@@ -26,11 +26,32 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     font-family: var(--font-sans);
     color: var(--text-main);
     background-color: var(--bg-dark);
     overflow-x: hidden;
+}
+
+/* Lenis Smooth Scroll Rules */
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+    pointer-events: none;
 }
 
 body {
